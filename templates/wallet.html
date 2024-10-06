@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Підключення Гаманця</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@1.0.0/dist/ton-connect.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        #connectWallet {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #connectWallet:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Підключити гаманець TON</h2>
+    <button id="connectWallet">Підключити гаманець</button>
+
+    <script>
+        const connector = new TonConnect({
+            bridgeUrl: 'https://bridge.tonconnect.org', // URL моста
+            projectId: 'YOUR_PROJECT_ID', // Ваш ID проекту
+        });
+
+        document.getElementById('connectWallet').onclick = async () => {
+            const confirmPayment = confirm("Ви впевнені, що хочете сплатити 0.10 TON за підключення?");
+            
+            if (confirmPayment) {
+                try {
+                    const session = await connector.connect();
+                    console.log('Підключення успішне:', session);
+                    
+                    // Тут ви можете виконати транзакцію на сплату комісії
+                    // Використовуйте свою адресу
+                    const recipient = 'UQAzeFO819-pumlHDacrkiD_FmepkupojDj7OPTPDHe3hH2j';
+                    const amount = '0.10'; // Сума в TON
+
+                    // Код для виконання переказу токенів
+                    // Цей код залежить від конкретного API вашого гаманця
+                    // ...
+
+                } catch (error) {
+                    console.error('Помилка підключення:', error);
+                }
+            } else {
+                console.log("Сплата комісії скасована.");
+            }
+        };
+    </script>
+
+</body>
+</html>
