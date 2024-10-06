@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/styles.css">
-    <title>Створення Групи</title>
+    <title>Спільнота</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,13 +18,18 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            background-color: #ffffff99; /* Прозорий білий */
-            padding: 10px 15px;
+            background-color: #aaaaaa; /* Сіра кнопка */
+            padding: 5px 10px; /* Зменшене відступ */
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
-            color: #333;
-            font-size: 16px;
+            color: #333; /* Колір тексту */
+            font-size: 12px; /* Зменшений шрифт для кнопки "Закрити" */
+            border: none; /* Зняти обводку, якщо є */
+        }
+
+        .back-button:hover {
+            background-color: #999999; /* Темніший відтінок при наведенні */
         }
 
         .form-container {
@@ -45,7 +50,7 @@
 
         button {
             padding: 10px 20px;
-            background-color: #28a745;
+            background-color: #28a745; /* Зелена кнопка для "Створити" */
             color: white;
             border: none;
             border-radius: 5px;
@@ -54,33 +59,112 @@
         }
 
         button:hover {
-            background-color: #218838;
+            background-color: #28a745; /* Темніший відтінок при наведенні */
+        }
+
+        .send-button {
+            background-color: #28a745; /* Зелена кнопка для "Надіслати" */
+        }
+
+        .send-button:hover {
+            background-color: #218838; /* Темніший відтінок при наведенні */
         }
 
         h2 {
             text-align: center;
             color: #333;
-            margin-top: 50px;
+            margin-top: 10px;
             font-size: 24px;
         }
 
-        #groupListContainer {
+        #myGroupsContainer {
             margin: 20px auto;
-            max-width: 600px;
-            max-height: 300px;
-            overflow-y: auto;
-            background-color: rgba(128, 128, 128, 0.5); /* Сірий та прозорий */
+            width: 90%; /* Встановити ширину контейнера на 100% */
+            height: 115px; /* Фіксована висота контейнера */
+            overflow-y: auto; /* Дозволити вертикальну прокрутку */
+            background-color: rgba(128, 128, 128, 0.5); /* Сірий та прозорий фон */
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ccc;
         }
 
         .group {
-            padding: 10px;
+            padding: 8px; /* Зменшене відступ */
             margin-bottom: 10px;
             background-color: #e9ecef;
             border-radius: 5px;
             text-align: left;
+            cursor: pointer; /* Додаємо курсор вказівник для груп */
+        }
+
+        #chatContainer {
+            display: none; /* Сховати контейнер чату спочатку */
+            position: fixed; /* Фіксоване положення */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(200, 200, 200, 0.8); /* Прозорий сірий фон */
+            padding: 20px;
+            border-radius: 5px;
+            overflow: hidden; /* Сховати прокрутку */
+            background: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg') no-repeat center center fixed; /* Фон чату */
+            z-index: 1000; /* На верху інших елементів */
+        }
+
+        #messages {
+            height: 400px; /* Встановлена фіксована висота контейнера */
+            overflow-y: auto; /* Дозволити прокрутку */
+            margin-bottom: 15px; /* Відступ знизу */
+            border: 1px solid #ccc; /* Обводка контейнера */
+            border-radius: 5px; /* Заокруглення країв */
+            padding: 10px; /* Внутрішній відступ */
+            background-color: rgba(255, 255, 255, 0.1); /* Прозорий фон для повідомлень */
+        }
+
+        .message {
+            margin-bottom: 17px; /* Зменшене відстань між повідомленнями */
+            padding: 10px; /* Внутрішній відступ */
+            border-radius: 20px; /* Заокруглення країв */
+            max-width: 75%; /* Максимальна ширина повідомлення */
+            position: relative; /* Для позиціонування часу */
+            font-size: 17px; /* Збільшений шрифт для тексту повідомлення */
+            word-wrap: break-word; /* Переносити текст на новий рядок */
+            overflow-wrap: break-word; /* Для підтримки старих браузерів */
+        }
+
+        .message.user1 {
+            background-color: #d1e7dd; /* Світло-зелений для першого користувача */
+            color: #0f5132;
+            margin-left: auto; /* Вирівнювання вправо */
+        }
+
+        .message.user2 {
+            background-color: #fff3cd; /* Світло-жовтий для другого користувача */
+            color: #856404;
+            margin-right: auto; /* Вирівнювання вліво */
+        }
+
+        .time {
+            font-size: 0.8em;
+            color: gray;
+            position: absolute; /* Фіксоване положення */
+            bottom: -18px; /* Відстань віднизу */
+            right: 10px; /* Відстань від правого краю */
+        }
+
+        #messageInputContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute; /* Фіксоване положення */
+            bottom: 20px; /* Відступ знизу */
+            left: 20px; /* Відступ зліва */
+            right: 20px; /* Відступ справа */
+        }
+
+        #searchResults {
+            margin-top: 10px; /* Відступ між полем пошуку та результатами */
         }
     </style>
 </head>
@@ -93,28 +177,122 @@
         <button id="createGroupButton">Створити</button>
     </div>
 
-    <h2>Створені групи</h2>
-    <div id="groupListContainer">
-        <div id="groupList">
-            <!-- Сюди будуть потрапляти створені групи -->
+    <h2>Пошук груп</h2>
+    <input type="text" id="groupSearch" placeholder="Пошук груп" />
+    <div id="searchResults">
+        <!-- Результати пошуку будуть тут -->
+    </div>
+
+    <h2>Мої групи</h2>
+    <div id="myGroupsContainer">
+        <div id="myGroups">
+            <!-- Тут будуть потрапляти створені та знайдені групи -->
+        </div>
+    </div>
+
+    <div id="chatContainer">
+        <button id="closeChatButton">Закрити</button>
+        <div id="messages">
+            <!-- Тут будуть відображатися повідомлення -->
+        </div>
+        <div id="messageInputContainer">
+            <input type="text" id="messageInput" placeholder="Ваше повідомлення">
+            <button id="sendMessageButton">Надіслати</button>
         </div>
     </div>
 
     <script>
-        document.getElementById('createGroupButton').addEventListener('click', function() {
-            const groupName = document.getElementById('groupNameInput').value;
-            if (groupName) {
-                // Додаємо нову групу до списку
-                const newGroupDiv = document.createElement('div');
-                newGroupDiv.classList.add('group');
-                newGroupDiv.textContent = groupName;
-                document.getElementById('groupList').appendChild(newGroupDiv);
+    const users = ['user1', 'user2']; // Список користувачів для прикладу
+    let currentUserIndex = 0; // Індекс поточного користувача
+    let groups = []; // Масив для зберігання груп
 
-                // Очищуємо поле вводу
-                document.getElementById('groupNameInput').value = '';
-            }
+    const groupSearch = document.getElementById('groupSearch'); // Поле пошуку
+    const myGroups = document.getElementById('myGroups'); // Контейнер для "Мої групи"
+    const searchResults = document.getElementById('searchResults'); // Контейнер для результатів пошуку
+
+    document.getElementById('createGroupButton').addEventListener('click', function () {
+        const groupName = document.getElementById('groupNameInput').value;
+        if (groupName) {
+            // Додаємо нову групу до масиву груп
+            groups.push(groupName);
+            // Очищаємо поле вводу
+            document.getElementById('groupNameInput').value = '';
+            // Оновлюємо контейнер "Мої групи"
+            updateMyGroupsContainer();
+        }
+    });
+
+    groupSearch.addEventListener('input', function () {
+        const searchTerm = groupSearch.value.toLowerCase();
+        if (searchTerm) {
+            const filteredGroups = groups.filter(group => group.toLowerCase().includes(searchTerm));
+            displaySearchResults(filteredGroups);
+        } else {
+            // Якщо поле пошуку порожнє, очищуємо результати
+            searchResults.innerHTML = '';
+        }
+    });
+
+    function displaySearchResults(filteredGroups) {
+        searchResults.innerHTML = ''; // Очищаємо результати пошуку
+        filteredGroups.forEach(group => {
+            const div = document.createElement('div');
+            div.className = 'group';
+            div.innerText = group;
+            div.onclick = function () {
+                openChat(group);
+            };
+            searchResults.appendChild(div);
         });
-    </script>
+    }
 
+    function updateMyGroupsContainer() {
+        myGroups.innerHTML = ''; // Очищаємо контейнер
+        groups.forEach(group => {
+            const div = document.createElement('div');
+            div.className = 'group';
+            div.innerText = group;
+            div.onclick = function () {
+                openChat(group);
+            };
+            myGroups.appendChild(div);
+        });
+    }
+
+    function openChat(groupName) {
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.style.display = 'block'; // Відображаємо контейнер чату
+        document.getElementById('messages').innerHTML = ''; // Очищаємо повідомлення
+
+        // Перевіряємо, чи заголовок чату вже існує
+        let chatTitle = chatContainer.querySelector('h2');
+        if (!chatTitle) {
+            chatTitle = document.createElement('h2');
+            chatContainer.prepend(chatTitle);
+        }
+        chatTitle.innerText = `Чат групи: ${groupName}`; // Оновлюємо заголовок з ім'ям групи
+    }
+
+    document.getElementById('closeChatButton').addEventListener('click', function () {
+        document.getElementById('chatContainer').style.display = 'none'; // Закриваємо чат
+    });
+
+    document.getElementById('sendMessageButton').addEventListener('click', function () {
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value;
+        if (message) {
+            const messageContainer = document.createElement('div');
+            messageContainer.className = `message ${users[currentUserIndex]}`; // Додаємо клас для стилю
+            messageContainer.innerText = message;
+            const time = new Date().toLocaleTimeString(); // Отримуємо поточний час
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'time';
+            timeSpan.innerText = time; // Додаємо час
+            messageContainer.appendChild(timeSpan); // Додаємо час до повідомлення
+            document.getElementById('messages').appendChild(messageContainer); // Додаємо повідомлення в контейнер
+            messageInput.value = ''; // Очищаємо поле вводу повідомлення
+        }
+    });
+</script>
 </body>
 </html>
