@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+#groupList {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.group {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.group:hover {
+    background-color: #f0f0f0;
+}

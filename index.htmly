@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-image: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+            box-sizing: inherit;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                max-width: 100%;
+                width: 100%;
+                margin: 0 auto;
+                text-align: center;
+                flex: 1;
+                position: relative;
+                padding: 0 40px;
+            }
+
+            .balance-section {
+                background-color: rgba(128, 128, 128, 0.6);
+                padding: 10px;
+                border-radius: 15px;
+                margin: 130px auto 10px;
+                width: 80%;
+                max-width: 400px;
+                height: 90px;
+                position: relative;
+            }
+
+            .balance-section h2 {
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+
+            .balance-amount {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #c0ffb3;
+            }
+
+            .wallet-settings {
+                position: absolute;
+                top: -30px;
+                left: 10px;
+                display: flex;
+                gap: 20px;
+            }
+
+            .wallet-settings span {
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .buttons {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .stats-button, .w-ai-button {
+                padding: 5px 15px;
+                border-radius: 10px;
+                font-size: 0.9rem;
+                width: 100px;
+                border: none;
+                color: #fff;
+            }
+
+            .stats-button {
+                background-color: #7f69a5;
+            }
+
+            .w-ai-button {
+                background-color: #9e4dbf;
+            }
+
+            .mine-button {
+                padding: 10px 20px;
+                font-size: 1.2rem;
+                border-radius: 40px;
+                border: none;
+                background-color: #ff9800;
+                color: white;
+                cursor: pointer;
+                position: absolute;
+                bottom: 130px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                max-width: 400px;
+                height: 70px;
+                overflow: hidden;
+                font-family: 'Arial', sans-serif;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            .mine-button .progress {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                background-color: #4caf50;
+                width: 0;
+                transition: width 0.1s;
+            }
+
+            .mine-button .info {
+                position: relative;
+                z-index: 1;
+                font-size: 1rem;
+                color: white;
+                text-align: center;
+                line-height: 50px;
+                width: 100%;
+            }
+
+            .navigation {
+                background-color: rgba(128, 128, 128, 0.6);
+                padding: 15px;
+                border-radius: 15px;
+                display: flex;
+                justify-content: space-around;
+                position: fixed;
+                bottom: 10px;
+                left: 0;
+                right: 0;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .navigation div {
+                text-align: center;
+                color: #f2f2f2;
+                font-size: 0.9rem;
+            }
+
+            .navigation div span {
+                font-size: 1.8rem;
+            }
+
+            .active {
+                color: #ffeb3b;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Wallet and Settings icons -->
+    <div class="wallet-settings">
+        <span>👛</span> <!-- Wallet Icon -->
+        <span>⚙️</span> <!-- Settings Icon -->
+    </div>
+
+    <!-- Balance section -->
+    <div class="balance-section">
+        <h2>Ваш баланс:</h2>
+        <p class="balance-amount" id="balance">₴0.00</p>
+    </div>
+
+    <!-- Stats and W-AI buttons horizontally aligned -->
+    <div class="buttons">
+        <button class="stats-button">Статистика</button>
+        <button class="w-ai-button">W-AI</button>
+    </div>
+
+    <!-- Mining button with centered text and progress bar -->
+    <button class="mine-button" id="mine-button">
+        <div class="progress" id="progress-bar"></div>
+        <div class="info" id="info-text">0 поінтів | 00:00:00</div>
+    </button>
+</div>
+
+<footer>
+    <div class="navigation">
+        <div>
+            <span>🧑‍🤝‍🧑</span>
+            <div>Mates</div>
+        </div>
+        <div class="active">
+            <span>📝</span>
+            <div>Tasks</div>
+        </div>
+        <div>
+            <span>🏛</span>
+            <div>Staking</div>
+        </div>
+        <div>
+            <span>🚀</span>
+            <div>Boost</div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    let balance = 0;
+    const mineButton = document.getElementById('mine-button');
+    const progressBar = document.getElementById('progress-bar');
+    const infoText = document.getElementById('info-text');
+    const balanceDisplay = document.getElementById('balance');
+    let miningTime = 10000; // Загальний час майнінгу в мілісекундах (10 секунд)
+    let totalPoints = 10; // Кількість поінтів, які додаються за один цикл
+
+    // Функція для перетворення часу в години, хвилини, секунди
+    function formatTime(ms) {
+        let totalSeconds = Math.floor(ms / 1000);
+        let hours = Math.floor(totalSeconds / 3600);
+        let minutes = Math.floor((totalSeconds % 3600) / 60);
+        let seconds = totalSeconds % 60;
+
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function startMining() {
+        let progress = 0;
+        let pointsMined = 0;
+        let remainingTime = miningTime; // Залишковий час у мілісекундах
+        mineButton.disabled = true;
+        infoText.innerText = `0 поінтів | ${formatTime(remainingTime)} залишилося`;
+
+        const interval = setInterval(() => {
+            progress += 1;
+            pointsMined = Math.floor((totalPoints * progress) / 100); // Обчислення поінтів в реальному часі
+            remainingTime = Math.max(0, miningTime - (miningTime * progress / 100)); // Оновлення залишкового часу
+
+            progressBar.style.width = `${progress}%`; // Прогрес-бар заповнюється
+            infoText.innerText = `${pointsMined} поінтів | ${formatTime(remainingTime)} залишилося`; // Відображення поінтів та часу
+
+            if (progress >= 100) {
+                clearInterval(interval);
+                balance += totalPoints;
+                balanceDisplay.innerText = `₴${balance.toFixed(2)}`;
+                progressBar.style.width = '0%';
+                infoText.innerText = `0 поінтів | 00:00:00`;
+                mineButton.disabled = false;
+            }
+        }, miningTime / 100); // Час оновлення кожного кроку
+    }
+
+    mineButton.addEventListener('click', startMining);
+</script>
+
+</body>
+</html>

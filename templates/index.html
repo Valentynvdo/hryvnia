@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+body {
+    background-image: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-family: Arial, sans-serif;
+    color: white;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.image-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+img {
+    max-width: 300%; /* Збільште зображення до 100% ширини контейнера */
+    height: 240px; /* Автоматичне збереження пропорцій зображення */
+}
+        body {
+            background-image: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+            box-sizing: inherit;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                max-width: 100%;
+                width: 100%;
+                margin: 0 auto;
+                text-align: center;
+                flex: 1;
+                position: relative;
+                padding: 0 20px;
+                font-size: 0.8rem;
+            }
+
+            .balance-section {
+                background-color: rgba(128, 128, 128, 0.6);
+                padding: 7px;
+                border-radius: 15px;
+                margin: 50px auto 10px;
+                width: 80%;
+                max-width: 400px;
+                height: 95px;
+                position: relative;
+            }
+
+            .balance-section h2 {
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+
+            .balance-amount {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #c0ffb3;
+            }
+
+            .wallet-settings {
+                position: absolute;
+                top: 6px;
+                left: 290px;
+                display: flex;
+                gap: 25px;
+            }
+
+            .wallet-settings span {
+                font-size: 1.9rem;
+                cursor: pointer;
+            }
+
+            .buttons {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .stats-button, .w-ai-button {
+                padding: 10px 15px;
+                border-radius: 10px;
+                font-size: 0.8rem;
+                width: auto;
+                border: none;
+                color: #fff;
+                text-align: center;
+            }
+
+            .stats-button {
+                background-color: #7f69a5;
+                text-align: center; 
+                white-space: nowrap;
+            }
+
+            .w-ai-button {
+                background-color: #9e4dbf;
+            }
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #1a1a1a;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+#farming-btn {
+    background: linear-gradient(135deg, #00ff00, #00cc00); /* зелена кнопка при початку */
+    border: none;
+    border-radius: 50px;
+    padding: 15px 40px;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#farming-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#farming-btn.farming {
+    background: linear-gradient(135deg, #808080, #666666); /* сіра кнопка під час фармінгу */
+}
+
+#farming-btn.reward {
+    background: linear-gradient(135deg, #FFD700, #FFA500); /* жовта кнопка для отримання нагороди */
+}
+
+#fireworks-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    display: none;
+}
+
+.navigation {
+    background-color: rgba(128, 128, 128, 0.6);
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    max-width: 400px;
+    margin: 0 auto;
+}
+            .navigation div {
+                text-align: center;
+                color: #f2f2f2;
+                font-size: 0.9rem;
+            }
+
+            .navigation div span {
+                font-size: 1.8rem;
+            }
+
+            .active {
+                color: #ffeb3b;
+            }
+             span {
+                font-size: 1.rem;
+                cursor: pointer;
+            }
+html, body {
+    overflow: hidden; /* Заборона прокрутки */
+    height: 100%; /* Забезпечує повну висоту */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: fixed; /* Фіксує фон */
+    width: 100%; /* Забезпечує, що контент не перевищує ширину */
+}
+.stats-button, .w-ai-button {
+  background-color: #7f69a5; /* Колір для кнопки статистики */
+  color: #fff;
+  padding: 10px 20px; /* Внутрішні відступи */
+  border-radius: 10px; /* Заокруглення кутів */
+  font-size: 1rem; /* Розмір шрифту */
+  border: none; /* Без рамки */
+  cursor: pointer; /* Вказівник при наведенні */
+  transition: background-color 0.3s ease; /* Анімація зміни кольору */
+}
+
+.w-ai-button {
+  background-color: #9e4dbf; /* Інший колір для W-AI */
+}
+
+.stats-button:hover, .w-ai-button:hover {
+  background-color: #6b559c; /* Колір при наведенні */
+}
+
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Wallet and Settings icons -->
+    <div class="wallet-settings">
+<span onclick="window.location.href='wallet.html';">👛</span> <!-- Wallet Icon -->
+<span onclick="window.location.href='settings.html';">⚙️</span> <!-- Settings Icon -->
+    </div>
+
+    <!-- Balance section -->
+    <div class="balance-section">
+        <h2>Ваш баланс:</h2>
+        <p class="balance-amount" id="balance">₴0.00</p>
+    </div>
+
+    <!-- Stats and W-AI buttons horizontally aligned -->
+    <div class="buttons">
+<button class="stats-button" onclick="window.location.href='stats.html';">Статистика</button>
+<button class="w-ai-button" onclick="window.location.href='/w-ai';">Можливості</button>
+    </div>
+
+<div iv class="image-container">
+        <img src="https://i.ibb.co/C5PqL9P/ваше-зображення.jpg" alt="Опис зображення">
+  
+        <button id="farming-btn" onclick="startFarming()">Почати фарминг</button>
+        <div id="fireworks-container"></div>
+    </div>
+  
+<footer>
+    <div class="navigation">
+        <div>
+<span onclick="window.location.href='mates.html';">🧑‍🤝‍🧑</span>
+            <div>Mates</div>
+        </div>
+       <div>
+<span onclick="window.location.href='Tasks.html';">📝‍</span>
+            <div>Tasks</div>
+        </div>
+        <div>
+<span onclick="window.location.href='Staking.html';">🏦</span>
+            <div>Staking</div>
+        </div>
+        <div>
+<span onclick="window.location.href='Boost.html';">🚀</span>
+            <div>Boost</div>
+        </div>
+    </div>
+</footer>
+  
+<script>
+   let farmingActive = false;
+    let totalBalance = 0;
+    let farmingPoints = 0.000;  
+    let farmingDuration = 8; 
+    let maxPoints = 19; 
+    let pointsPerSecond = maxPoints / farmingDuration; 
+
+    function startFarming() {
+        const farmingBtn = document.getElementById('farming-btn');
+        if (!farmingActive) {
+            farmingActive = true;
+            farmingPoints = 0.000;  
+            farmingBtn.innerText = `00:00:08 | ${farmingPoints.toFixed(3)} поінтів`;
+            farmingBtn.classList.add('farming');
+            farmingBtn.disabled = true;
+
+            let timeLeft = farmingDuration;
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                farmingPoints += pointsPerSecond;  
+                const hours = Math.floor(timeLeft / 3600).toString().padStart(2, '0');
+                const minutes = Math.floor((timeLeft % 3600) / 60).toString().padStart(2, '0');
+                const seconds = (timeLeft % 60).toString().padStart(2, '0');
+                farmingBtn.innerText = `${hours}:${minutes}:${seconds} | ${farmingPoints.toFixed(3)} поінтів`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    farmingBtn.innerText = "Забрати нагороду";
+                    farmingBtn.classList.remove('farming');
+                    farmingBtn.classList.add('reward');
+                    farmingBtn.disabled = false;
+                    farmingBtn.onclick = collectReward;
+                }
+            }, 1000); 
+        }
+    }
+
+    function collectReward() {
+        const farmingBtn = document.getElementById('farming-btn');
+        const fireworksContainer = document.getElementById('fireworks-container');
+
+        // Додати нагороду до балансу
+        totalBalance += farmingPoints;
+        document.getElementById('balance').innerText = `₴${totalBalance.toFixed(2)}`; // Оновлення відображення балансу
+
+        // Показати анімацію феєрверку
+        showFireworks(farmingBtn);
+
+        farmingBtn.innerText = "Почати фарминг";
+        farmingBtn.classList.remove('reward');
+        farmingBtn.classList.add('start');
+        farmingBtn.onclick = startFarming;
+        farmingActive = false;
+    }
+
+    function showFireworks(button) {
+        const fireworksContainer = document.getElementById('fireworks-container');
+        fireworksContainer.style.display = 'block';
+
+        for (let i = 0; i < 20; i++) {
+            const spark = document.createElement('div');
+            spark.classList.add('spark');
+            fireworksContainer.appendChild(spark);
+
+            const angle = Math.random() * 360;
+            const distance = Math.random() * 100 + 50;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+
+            spark.style.left = `${button.offsetLeft + button.offsetWidth / 2}px`;
+            spark.style.top = `${button.offsetTop + button.offsetHeight / 2}px`;
+
+            spark.style.transform = `translate(${x}px, ${y}px)`;
+            
+            setTimeout(() => {
+                spark.remove();
+            }, 1000);
+        }
+
+        setTimeout(() => {
+            fireworksContainer.style.display = 'none';
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>

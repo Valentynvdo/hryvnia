@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Створення Групи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #ffffff99; /* Прозорий білий */
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 80px;
+        }
+
+        input[type="text"] {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 50px;
+            font-size: 24px;
+        }
+
+        #groupListContainer {
+            margin: 20px auto;
+            max-width: 600px;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: rgba(128, 128, 128, 0.5); /* Сірий та прозорий */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .group {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="/w-ai" class="back-button">Назад</a>
+
+    <div class="form-container">
+        <input type="text" id="groupNameInput" placeholder="Назва групи" required>
+        <button id="createGroupButton">Створити</button>
+    </div>
+
+    <h2>Створені групи</h2>
+    <div id="groupListContainer">
+        <div id="groupList">
+            <!-- Сюди будуть потрапляти створені групи -->
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('createGroupButton').addEventListener('click', function() {
+            const groupName = document.getElementById('groupNameInput').value;
+            if (groupName) {
+                // Додаємо нову групу до списку
+                const newGroupDiv = document.createElement('div');
+                newGroupDiv.classList.add('group');
+                newGroupDiv.textContent = groupName;
+                document.getElementById('groupList').appendChild(newGroupDiv);
+
+                // Очищуємо поле вводу
+                document.getElementById('groupNameInput').value = '';
+            }
+        });
+    </script>
+
+</body>
+</html>

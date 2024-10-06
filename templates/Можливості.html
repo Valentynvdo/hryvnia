@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Можливості</title>
+    <style>
+        body {
+            background-image: url(https://i.ibb.co/ypLBtmy/IMG-3860.jpg);
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .header {
+            text-align: left;
+            padding: 20px;
+            color: #FFFFFF;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            flex-wrap: wrap;
+        }
+        .icon {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 0 10px purple;
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 9px;
+            position: relative;
+        }
+        .icon span {
+            font-size: 2em;
+        }
+        .icon p {
+            margin-top: 1px;
+            font-size: 1em;
+        }
+        .circle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 400px;
+            position: relative;
+        }
+        .circle-container .icon {
+            position: absolute;
+        }
+        .icon:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .icon:nth-child(2) {
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+        .icon:nth-child(3) {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .icon:nth-child(4) {
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+        }
+        .top-right {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+       .btn {
+    background-color: rgba(128, 128, 128, 0.5); /* Сірий прозорий фон */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.btn:hover {
+    background-color: rgba(105, 105, 105, 0.7); /* Темніший сірий на ховер */
+}
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Можливості</h1>
+    <div class="stats">
+        <p>Це місце, де ви можете створювати групи, модерувати спільноти та отримувати винагороди.</p>
+    </div>
+</div>
+
+<div class="top-right">
+<button class="back-button" onclick="window.location.href='/'">Назад</button> <!-- Тепер веде на головну сторінку -->
+    <button class="btn" onclick="window.location.href='info.html';">ℹ️</button>
+</div>
+
+<div class="container">
+    <div class="circle-container">
+        <div class="icon">
+            <span role="img">🔍</span>
+            <p>Пошук</p>
+        </div>
+        <div class="icon">
+            <span role="img">📈</span>
+            <p>Статистика</p>
+        </div>
+        <div class="icon">
+<i class="info-icon" onclick="window.location.href='/спільнота';">💬</i>
+            <p>спільнота</p>
+        </div>
+        <div class="icon">
+            <span role="img">🎯</span>
+            <p>Цілі</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

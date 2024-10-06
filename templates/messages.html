@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Чат з групою</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+</head>
+<body>
+    <h1>Чат з групою: {{ group_name }}</h1>
+
+    <div id="messagesContainer">
+        <!-- Тут будуть відображатися повідомлення -->
+    </div>
+
+    <input type="text" id="messageInput" placeholder="Ваше повідомлення">
+    <button id="sendMessage">Надіслати</button>
+
+    <script>
+        const groupName = "{{ group_name }}";
+        const socket = io();
+
+        socket.on('new_message', function(message) {
+            const container = document.getElementById('messagesContainer');
+            const msgDiv = document.createElement('div');
+            msgDiv.textContent = message;
+            container.appendChild(msgDiv);
+        });
+
+        document.getElementById('sendMessage').addEventListener('click', function() {
+            const message = document.getElementById('messageInput').value;
+            socket.emit('send_message', { group_name: groupName, message: message });
+            document.getElementById('messageInput').value = ''; // Очистіть поле введення
+        });
+
+        function loadMessages() {
+            fetch('/get_messages/' + groupName)
+                .then(response => response.json())
+                .then(messages => {
+                    const container = document.getElementById('messagesContainer');
+                    container.innerHTML = ''; // Очистити контейнер перед оновленням
+                    messages.forEach(message => {
+                        const msgDiv = document.createElement('div');
+                        msgDiv.textContent = message;
+                        container.appendChild(msgDiv);
+                    });
+                });
+        }
+
+        loadMessages(); // Завантажити повідомлення при завантаженні сторінки
+    </script>
+</body>
+</html>
