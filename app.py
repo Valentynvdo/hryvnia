@@ -18,7 +18,11 @@ def w_ai():
 @app.route('/спільнота')
 def community():
     return render_template('спільнота.html', groups=groups)
-
+    
+@app.route('/wallet')
+def wallet():
+    return render_template('wallet.html')
+    
 @app.route('/create_group', methods=['POST'])
 def create_group():
     group_name = request.form['group_name']
