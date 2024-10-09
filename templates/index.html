@@ -7,44 +7,48 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest"></script>
 </head>
-
 <style>
-  
    .custom-container {
-    position: absolute;
-    top: 390px; /* Відступ від верхнього краю */
-    left: 20px; /* Відступ від лівого краю */
+    position: relative;
+    top: 58px; /* Відступ від верхнього краю */
+    left: 25px; /* Відступ від лівого краю */
     width: 120px;
     height: 60px;
     padding: 1px;
     border-radius: 10px;
     box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-    background-color: #A9A9A9;    
+    background-color: #A9A9A9;  
+    opacity: 0.5;
+    z-index: 600;
      }
   
   body {
     position: relative; /* Необхідно для абсолютного позиціювання контейнера */
 }
 
-.container {
-    position: absolute;
-    top: -1px; /* Відстань від верхнього краю */
+ .container {
+    position: relative;
+    top: -29px; /* Відстань від верхнього краю */
     left: 190px; /* Відстань від лівого краю */
     width: 120px;
-    height: 60px;
+    height: 63px;
+    display: flex;
+    justify-content: flex-start; 
     background-color: #A9A9A9;
     box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-}
+    z-index: 600; 
+   }
   
   #coin-balance {
-        position: absolute;
+        position: relative;
             font-size: 18px;
             font-weight: bold;
             color: #ffffff;
-            margin-top: 10px;
-            text-aling: right;
-            margin-left: 55px;
+            margin-top: 30px;
+            text-align: right;
+            margin-left: 50px;
+            top: 12px;
     }
   
     body {
@@ -58,35 +62,22 @@
     }
   
     .header {
-        margin-bottom: -60px;
+        margin-bottom: -80px;
     }
 
     .header-image {
         width: 80%;
         height: auto;
         border-radius: 10px;
-        margin-bottom: 30px;
+        margin-bottom: 40px;
         margin-left: 30px;
+        
     }
 
     /* Wallet Section */
     .wallet-section h2 {
         font-size: 24px;
         margin-bottom: 15px;
-    }
-
-    .connect-wallet-btn {
-        background-color: #ADD8E6;
-        color: #000000;
-        font-size: 18px;
-        padding: 10px;
-        border-radius: 15px;
-        border: none;
-        cursor: pointer;
-        margin-bottom: 180px;
-        box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Світіння */
-    transition: box-shadow 0.3s ease; /* Плавний перехід */
-      width: 100%
     }
 
     /* Transfer Section */
@@ -100,22 +91,23 @@
         font-size: 18px;
         margin-bottom: 10px;
         display: flex;
-        gap: 61px; /* Відступ між заголовками */
+        gap: 74px; /* Відступ між заголовками */
         padding: 0 30px;
         color: white;
     }
 
     .transfer-table-container {
         background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
+        border-radius: 10px;
         padding: 10px;
         height: 100px; /* Фіксована висота контейнера */
         overflow-y: auto; /* Додати прокрутку по вертикалі */
         margin-bottom: 20px; /* Відступ віднизу */
+
     }
 
     .transfer-table {
-        width: 100%;
+        width: 95%;
         border-collapse: collapse;
     }
 
@@ -133,41 +125,137 @@
         border-radius: 15px;
         border: none;
         cursor: pointer;
-        width: 100%;
-        box-shadow: 0 0 70px rgba(189, 183, 107, 0.9); /* Світіння */
+        width: 95%;
+        box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
     transition: box-shadow 0.3s ease; /* Плавний перехід */
-      width: 100%
+        margin-left: 10px;
     }
 
     @media (max-width: 700px) {
         .app-container {
             padding: 10px;
+          
         }
+      
+      .resizable-container {
+    width: 83%; 
+    height: 100px; 
+    background-color: #f0f0f0; 
+    padding: 30px;
+    overflow: auto;
+    top: 30px;
+    position: relative;
+    border-radius: 20px;
+    opacity: 0.1;
+}
+      .icon {
+    position: relative;
+    font-size: 40px; /* Розмір шрифта для символу */
+    margin: 0 169px; /* Відстань з боків */
+    align-items: center;
+    top: -9px;
+    } 
+      
+    /* Стиль для кнопки-гамбургера */
+.hamburger {
+  position: relative;
+  width: 30px;
+  cursor: pointer;
+  margin-left: 10px;
+  top: 78px;
+}
+
+.hamburger .line {
+  width: 100%;
+  height: 4px;
+  background-color: white;
+  margin: 6px 0;
+}
+/* Стиль для меню */
+.menu {
+  display: none; /* Сховане меню */
+  background-color: rgba(255, 255, 255, 1.0);
+  padding: 100px;
+  position: absolute;
+  top: 70px;
+  right: 10px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+  border-radius: 8px;
+  width: 160px;
+  height: 517px;
+  z-index: 1000;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu ul li {
+  padding: 10px 0;
+}
+
+.menu ul li a {
+  text-decoration: none;
+  color: black;
+}
+      .close-button {
+    position: absolute;
+    top: 10px; /* Відстань від верхнього краю */
+    right: 20px; /* Відстань від правого краю */
+    font-size: 24px; /* Розмір шрифта */
+    color: #ffffff; /* Колір тексту */
+    cursor: pointer; /* Курсор у вигляді руки */
+    background: none; /* Без фону */
+    border: none; /* Без обводки */
+}
+      
 </style>
 <body>
+<!-- Кнопка-гамбургер -->
+<div class="hamburger" onclick="toggleMenu()">
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+</div>
+
+<!-- Вікно меню -->
+<div id="menu" class="menu">
+    <div class="modal">
+        <span class="close-button" onclick="closeModal()">×</span> <!-- Кнопка закриття -->
+        <div class="modal-content">
+            <ul>
+                <li><a href="#">Пункт 1</a></li>
+                <li><a href="#">Пункт 2</a></li>
+                <li><a href="#">Пункт 3</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+  
     <div class="app-container">
         <!-- Header Section with Image -->
         <div class="header">
             <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image">
         </div>
-
-        <!-- Wallet Connection Section -->
-        <div class="wallet-section">
-            <button class="connect-wallet-btn" id="connect-wallet-btn">Connect Wallet TON</button>
-          </div>
+      
+       <div class="resizable-container">
+    <!-- Вміст контейнера -->
+</div>
       
       <div class="custom-container">
 <div id="balance" style="margin-top: 5px; font-size: 18px; color: #fff;">
                 <span id="coin-balance">0</span>
-                  <div>
               <div class="container"></div>
                 </div>
-            </div>
-         </div>
-        
+            </div> 
+        </div> 
+<span class="icon">⚡️</span>
+ 
         <!-- Transfer Section -->
         <div class="transfer-section">
             <!-- Заголовки Transfer, Date, Points над вікном -->
+        
             <div class="transfer-table-header">
                 <span>Transfer</span>
                 <span>Date</span>
@@ -191,6 +279,27 @@
     </div>
 
     <script>
+      function closeModal() {
+    document.getElementById('menu').style.display = 'none'; // Сховати меню
+}
+
+// Якщо потрібно, щоб меню відображалося при натисканні на кнопку-гамбургер
+function toggleMenu() {
+    const menu = document.getElementById('menu');
+    if (menu.style.display === 'block') {
+        menu.style.display = 'none'; // Якщо меню відкрите, закриваємо
+    } else {
+        menu.style.display = 'block'; // Інакше відкриваємо меню
+    }
+}
+      function toggleMenu() {
+  var menu = document.getElementById("menu");
+  if (menu.style.display === "none" || menu.style.display === "") {
+    menu.style.display = "block";
+  } else {
+    menu.style.display = "none";
+  }
+}
         let balance = 0;
         const miningDuration = 8000; // 8 секунд
         const miningPoints = 19;
@@ -226,21 +335,6 @@
                 startMiningButton.disabled = false; // Увімкнути кнопку
                 startMiningButton.textContent = 'Start Mining'; // Відновити текст кнопки
             }, miningDuration);
-        });
-
-        // TON Connect SDK Integration
-        const connectButton = document.getElementById('connect-wallet-btn');
-        const tonConnect = new TonConnect();
-
-        connectButton.addEventListener('click', async () => {
-            try {
-                const connection = await tonConnect.connect();
-                alert('Wallet connected successfully!');
-                console.log('Wallet details:', connection);
-            } catch (error) {
-                console.error('Failed to connect wallet:', error);
-                alert('Failed to connect wallet.');
-            }
         });
     </script>
 </body>
