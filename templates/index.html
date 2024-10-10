@@ -5,337 +5,8 @@
     <title>Wallet App</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest"></script>
-</head>
-<style>
-  body {
-  /* Заборона вертикальної прокрутки */
-body {
-    overflow-y: hidden; /* Заборонити прокрутку вгору і вниз */
-    overscroll-behavior: none; /* Вимкнути інерційну прокрутку на мобільних пристроях */
-}
-
-/* Для мобільних пристроїв (до 480px) */
-@media (max-width: 480px) {
-    body {
-        overflow-y: hidden; /* Заборонити вертикальну прокрутку */
-    }
-
-    .custom-container {
-        position: relative;
-        top: -80px; /* Відступ від верхнього краю */
-        left: 25px; /* Відступ від лівого краю */
-        width: 120px;
-        height: 60px;
-        padding: 1px;
-        border-radius: 10px;
-        box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-        background-color: #A9A9A9;  
-        opacity: 0.5;
-        z-index: 1;
-    }
-
-    body {
-        position: relative; /* Необхідно для абсолютного позиціювання контейнера */
-    }
-
-    .container {
-        position: relative;
-        top: -29px; /* Відстань від верхнього краю */
-        left: 190px; /* Відстань від лівого краю */
-        width: 120px;
-        height: 63px;
-        display: flex;
-        justify-content: flex-start; 
-        background-color: #A9A9A9;
-        box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        z-index: 1; 
-    }
-
-    #coin-balance {
-        position: relative;
-        font-size: 18px;
-        font-weight: bold;
-        color: #ffffff;
-        margin-top: 30px;
-        text-align: right;
-        margin-left: 50px;
-        top: 12px;
-    }
-
-    /* Wallet Section */
-    .wallet-section h2 {
-        font-size: 24px;
-        margin-bottom: 15px;
-    }
-
-    /* Transfer Section */
-    .transfer-section h3 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        margin-left: 30px;
-    }
-
-    .transfer-table-header {
-        margin-top: -130px;
-        font-size: 18px;
-        margin-bottom: 190px;
-        display: flex;
-        gap: 74px; /* Відступ між заголовками */
-        padding: 0 39px;
-        color: white;
-    }
-
-   .transfer-table-container {
-    margin-left: 10px;
-    width: 90%; 
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 10px; /* Встановіть відступ всередині контейнера */
-    height: 90px; /* Фіксована висота контейнера */
-    overflow-y: auto; /* Додати прокрутку по вертикалі */
-    margin-bottom: 20px; /* Відступ віднизу */
-    position: relative; /* Для використання top */
-    top: -185px; /* Зменште значення, щоб підняти контейнер */
-    }
-
-    .transfer-table {
-        width: 95%;
-        border-collapse: collapse;
-    }
-
-    .transfer-table td {
-        padding: 10px;
-        border-bottom: 1px solid #555;
-        color: white;
-    }
-
-    /* Mining Section */
-    .start-mining-btn {
-        position: relative;
-        background-color: #BDB76B;
-        font-size: 18px;
-        padding: 10px;
-        border-radius: 15px;
-        border: none;
-        cursor: pointer;
-        width: 95%;
-        box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
-        transition: box-shadow 0.3s ease; /* Плавний перехід */
-        margin-left: 10px; 
-        top: -199px;
-    }
-      
-    .resizable-container {
-        width: 78%; 
-        height: 70px; 
-        background-color: #f0f0f0; 
-        padding: 30px;
-        overflow: auto;
-        top: -90px;
-        position: relative;
-        border-radius: 20px;
-        opacity: 0.1;
-        margin-left: 12px;
-    }
-
-    .icon {
-        position: relative;
-        font-size: 40px; /* Розмір шрифта для символу */
-        margin: 0 159px; /* Відстань з боків */
-        align-items: center;
-        top: -140px;
-    } 
-
-    /* Стиль для кнопки-гамбургера */
-    .hamburger {
-        width: 30px;
-        cursor: pointer;
-        margin-left: 10px;
-        top: 8px;
-        z-index: 10000; /* Додано пропущене = */
-    }
-
-    .hamburger .line {
-        width: 100%;
-        height: 4px;
-        background-color: white;
-        margin: 6px 0;
-    }
-
-    /* Стиль для меню */
-    .menu {
-        display: none; /* Сховане меню */
-        background-color: rgba(255, 255, 255, 1.0);
-        padding: 10px;
-        position: fixed; /* Виправлено на fixed */
-        top: 0; /* Відстань від верхнього краю */
-        right: 10px; /* Відстань від правого краю */
-        box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
-        border-radius: 8px;
-        width: 160px;
-        height: 517px;
-        z-index: 9999;
-    }
-
-    .menu ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .menu ul li {
-        padding: 10px 0;
-    }
-
-    .menu ul li a {
-        text-decoration: none;
-        color: black;
-    }
-
-    .close-button {
-        position: absolute;
-        top: 10px; /* Відстань від верхнього краю */
-        right: 20px; /* Відстань від правого краю */
-        font-size: 24px; /* Розмір шрифта */
-        color: #ffffff; /* Колір тексту */
-        cursor: pointer; /* Курсор у вигляді руки */
-        background: none; /* Без фону */
-        border: none; /* Без обводки */
-        z-index: 10000; /* Додано пропущене = */
-    }
-}      
-</style>
-<body>
-<!-- Кнопка-гамбургер -->
-<div class="hamburger" onclick="toggleMenu()">
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-</div>
-
-<!-- Вікно меню -->
-<div id="menu" class="menu">
-    <div class="modal">
-        <span class="close-button" onclick="closeModal()">×</span> <!-- Кнопка закриття -->
-        <div class="modal-content">
-            <ul>
-                <li><a href="#">Пункт 1</a></li>
-                <li><a href="#">Пункт 2</a></li>
-                <li><a href="#">Пункт 3</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-  
-    <div class="app-container">
-        <!-- Header Section with Image -->
-        <div class="header">
-            <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image">
-        </div>
-      
-       <div class="resizable-container">
-    <!-- Вміст контейнера -->
-</div>
-      
-      <div class="custom-container">
-<div id="balance" style="margin-top: 5px; font-size: 18px; color: #fff;">
-                <span id="coin-balance">0</span>
-              <div class="container"></div>
-                </div>
-            </div> 
-        </div> 
-<span class="icon">⚡️</span>
- 
-        <!-- Transfer Section -->
-        <div class="transfer-section">
-            <!-- Заголовки Transfer, Date, Points над вікном -->
-        
-            <div class="transfer-table-header">
-                <span>Transfer</span>
-                <span>Date</span>
-                <span>Points</span>
-            </div>
-
-            <!-- Контейнер з прокруткою -->
-            <div class="transfer-table-container">
-                <table class="transfer-table" id="transfer-table">
-                    <tbody>
-                        <!-- Інформація про майнінг буде додаватися тут -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Start Mining Button -->
-        <div class="mining-section">
-            <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
-        </div>
-    </div>
-
-    <script>
-      function closeModal() {
-    document.getElementById('menu').style.display = 'none'; // Сховати меню
-}
-
-// Якщо потрібно, щоб меню відображалося при натисканні на кнопку-гамбургер
-function toggleMenu() {
-    const menu = document.getElementById('menu');
-    if (menu.style.display === 'block') {
-        menu.style.display = 'none'; // Якщо меню відкрите, закриваємо
-    } else {
-        menu.style.display = 'block'; // Інакше відкриваємо меню
-    }
-}
-        let balance = 0;
-        const miningDuration = 8000; // 8 секунд
-        const miningPoints = 19;
-
-        const balanceDisplay = document.getElementById('coin-balance');
-        const startMiningButton = document.getElementById('start-mining-btn');
-        const transferTableBody = document.querySelector('#transfer-table tbody');
-
-        startMiningButton.addEventListener('click', () => {
-            startMiningButton.disabled = true; // Вимкнути кнопку
-            startMiningButton.textContent = 'Mining in progress ⛏️...';
-
-            setTimeout(() => {
-                balance += miningPoints; // Додати монети до балансу
-                balanceDisplay.textContent = balance; // Оновити відображення балансу
-
-                // Додати інформацію до таблиці transfer
-                const now = new Date();
-                const date = now.toISOString().split('T')[0];
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>Mining</td><td>${date}</td><td>${miningPoints}</td>`;
-                transferTableBody.appendChild(row);
-
-                // Якщо більше 3-х рядків, видалити перший рядок
-                if (transferTableBody.children.length > 3) {
-                    transferTableBody.removeChild(transferTableBody.firstElementChild);
-                }
-
-                // Прокрутити до останнього запису
-                const transferTableContainer = document.querySelector('.transfer-table-container');
-                transferTableContainer.scrollTop = transferTableContainer.scrollHeight;
-
-                startMiningButton.disabled = false; // Увімкнути кнопку
-                startMiningButton.textContent = 'Start Mining'; // Відновити текст кнопки
-            }, miningDuration);
-        });
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet App</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest"></script>
-</head>
-<style>
- /* Заборона вертикальної прокрутки */
+    <style>
         body {
-            overflow-y: hidden; /* Заборонити прокрутку вгору і вниз */
             overscroll-behavior: none; /* Вимкнути інерційну прокрутку на мобільних пристроях */
             background-image: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg');
             background-size: cover;
@@ -344,14 +15,14 @@ function toggleMenu() {
             height: 100vh;
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Заборонити вертикальну прокрутку */
         }
 
         /* Для мобільних пристроїв (до 480px) */
-        @media (max-width: 480px) 
-        {
+        @media (max-width: 480px) {
             .custom-container {
                 position: relative;
-                margin-top: 10px;
+                top: 20px; /* Відступ від верхнього краю */
                 left: 25px; /* Відступ від лівого краю */
                 width: 120px;
                 height: 60px;
@@ -389,7 +60,7 @@ function toggleMenu() {
             }
 
             .header {
-                margin-bottom: -50px;
+                margin-bottom: -90px;
             }
 
             .header-image {
@@ -403,18 +74,54 @@ function toggleMenu() {
                 z-index: 1;
             }
 
+            /* Wallet Section */
+            .wallet-section h2 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            /* Transfer Section */
+            .transfer-section h3 {
+                font-size: 24px;
+                margin-bottom: 10px;
+                margin-left: 30px;
+            }
+
+            .transfer-table-header {
+                margin-top: -30px;
+                font-size: 18px;
+                margin-bottom: 190px;
+                display: flex;
+                gap: 74px; /* Відступ між заголовками */
+                padding: 0 39px;
+                color: white;
+            }
+
             .transfer-table-container {
                 margin-left: 10px;
                 width: 90%; 
                 background-color: rgba(255, 255, 255, 0.1);
                 border-radius: 10px;
-                padding: 10px;
+                padding: 10px; /* Встановіть відступ всередині контейнера */
                 height: 90px; /* Фіксована висота контейнера */
                 overflow-y: auto; /* Додати прокрутку по вертикалі */
-                margin-bottom: 70px;
-                margin-top: 190px;
-              }
-          
+                margin-bottom: 20px; /* Відступ віднизу */
+                position: relative; /* Для використання top */
+                top: -185px; /* Зменште значення, щоб підняти контейнер */
+            }
+
+            .transfer-table {
+                width: 95%;
+                border-collapse: collapse;
+            }
+
+            .transfer-table td {
+                padding: 10px;
+                border-bottom: 1px solid #555;
+                color: white;
+            }
+
+            /* Mining Section */
             .start-mining-btn {
                 position: relative;
                 background-color: #BDB76B;
@@ -424,32 +131,31 @@ function toggleMenu() {
                 border: none;
                 cursor: pointer;
                 width: 95%;
-                box-shadow: 0 0 60px rgba(189, 183, 107, 0.9);
-                transition: box-shadow 0.3s ease;
+                box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
+                transition: box-shadow 0.3s ease; /* Плавний перехід */
                 margin-left: 10px; 
-                margin-top: 2px;
+                top: -199px;
             }
-
+              
             .resizable-container {
                 width: 78%; 
                 height: 70px; 
                 background-color: #f0f0f0; 
                 padding: 30px;
                 overflow: auto;
+                top: 10px;
                 position: relative;
                 border-radius: 20px;
                 opacity: 0.1;
                 margin-left: 12px;
-                margin-top: 50px;
-
             }
 
             .icon {
                 position: relative;
-                font-size: 40px; 
-                margin: 0 159px; 
+                font-size: 40px; /* Розмір шрифта для символу */
+                margin: 0 159px; /* Відстань з боків */
                 align-items: center;
-                top: -140px;
+                top: -38px;
             } 
 
             /* Стиль для кнопки-гамбургера */
@@ -473,13 +179,13 @@ function toggleMenu() {
                 display: none; /* Сховане меню */
                 background-color: rgba(255, 255, 255, 1.0);
                 padding: 10px;
-                position: fixed; 
-                top: 0; 
-                right: 10px; 
+                position: fixed; /* Виправлено на fixed */
+                top: 0; /* Відстань від верхнього краю */
+                right: 10px; /* Відстань від правого краю */
                 box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
                 border-radius: 8px;
                 width: 160px;
-                height: 517px;
+                height: auto; /* Автоматична висота меню */
                 z-index: 9999;
             }
 
@@ -499,17 +205,18 @@ function toggleMenu() {
 
             .close-button {
                 position: absolute;
-                top: 10px; 
-                right: 20px; 
-                font-size: 24px; 
-                color: #ffffff; 
-                cursor: pointer; 
-                background: none; 
-                border: none; 
-                z-index: 10000; 
+                top: 10px; /* Відстань від верхнього краю */
+                right: 20px; /* Відстань від правого краю */
+                font-size: 24px; /* Розмір шрифта */
+                color: #000; /* Колір тексту */
+                cursor: pointer; /* Курсор у вигляді руки */
+                background: none; /* Без фону */
+                border: none; /* Без обводки */
+                z-index: 10000;
             }
         }
-</style>
+    </style>
+</head>
 <body>
 <!-- Кнопка-гамбургер -->
 <div class="hamburger" onclick="toggleMenu()">
@@ -532,101 +239,93 @@ function toggleMenu() {
     </div>
 </div>
   
-    <div class="app-container">
-        <!-- Header Section with Image -->
-        <div class="header">
-            <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image">
-        </div>
+<div class="app-container">
+    <!-- Header Section with Image -->
+    <div class="header">
+        <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image">
+    </div>
+  
+    <div class="resizable-container">
+        <!-- Вміст контейнера -->
+    </div>
       
-       <div class="resizable-container">
-    <!-- Вміст контейнера -->
-</div>
-      
-      <div class="custom-container">
-<div id="balance" style="margin-top: 5px; font-size: 18px; color: #fff;">
-                <span id="coin-balance">0</span>
-              <div class="container"></div>
-                </div>
-            </div> 
-        </div> 
-<span class="icon">⚡️</span>
- 
-        <!-- Transfer Section -->
-        <div class="transfer-section">
-            <!-- Заголовки Transfer, Date, Points над вікном -->
-        
-            <div class="transfer-table-header">
-                <span>Transfer</span>
-                <span>Date</span>
-                <span>Points</span>
-            </div>
-
-            <!-- Контейнер з прокруткою -->
-            <div class="transfer-table-container">
-                <table class="transfer-table" id="transfer-table">
-                    <tbody>
-                        <!-- Інформація про майнінг буде додаватися тут -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Start Mining Button -->
-        <div class="mining-section">
-            <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
+    <div class="custom-container">
+        <div id="balance" style="margin-top: 5px; font-size: 18px; color: #fff;">
+            <span id="coin-balance">0</span>
+            <div class="container"></div>
         </div>
     </div>
+</div>
+<span class="icon">⚡️</span>
 
-    <script>
-      function closeModal() {
-    document.getElementById('menu').style.display = 'none'; // Сховати меню
-}
+<!-- Transfer Section -->
+<div class="transfer-section">
+    <div class="transfer-table-header">
+        <span>Transfer</span>
+        <span>Date</span>
+        <span>Points</span>
+    </div>
 
-// Якщо потрібно, щоб меню відображалося при натисканні на кнопку-гамбургер
-function toggleMenu() {
-    const menu = document.getElementById('menu');
-    if (menu.style.display === 'block') {
-        menu.style.display = 'none'; // Якщо меню відкрите, закриваємо
-    } else {
-        menu.style.display = 'block'; // Інакше відкриваємо меню
+    <div class="transfer-table-container">
+        <table class="transfer-table" id="transfer-table">
+            <tbody>
+                <!-- Інформація про майнінг буде додаватися тут -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Start Mining Button -->
+<div class="mining-section">
+    <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
+</div>
+
+<script>
+    function closeModal() {
+        document.getElementById('menu').style.display = 'none'; // Сховати меню
     }
-}
-        let balance = 0;
-        const miningDuration = 8000; // 8 секунд
-        const miningPoints = 19;
 
-        const balanceDisplay = document.getElementById('coin-balance');
-        const startMiningButton = document.getElementById('start-mining-btn');
-        const transferTableBody = document.querySelector('#transfer-table tbody');
+    function toggleMenu() {
+        const menu = document.getElementById('menu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; // Toggle menu
+    }
 
-        startMiningButton.addEventListener('click', () => {
-            startMiningButton.disabled = true; // Вимкнути кнопку
-            startMiningButton.textContent = 'Mining in progress ⛏️...';
+    let balance = 0;
+    const miningDuration = 8000; // 8 секунд
+    const miningPoints = 19;
 
-            setTimeout(() => {
-                balance += miningPoints; // Додати монети до балансу
-                balanceDisplay.textContent = balance; // Оновити відображення балансу
+    const balanceDisplay = document.getElementById('coin-balance');
+    const startMiningButton = document.getElementById('start-mining-btn');
+    const transferTableBody = document.querySelector('#transfer-table tbody');
 
-                // Додати інформацію до таблиці transfer
-                const now = new Date();
-                const date = now.toISOString().split('T')[0];
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>Mining</td><td>${date}</td><td>${miningPoints}</td>`;
-                transferTableBody.appendChild(row);
+    startMiningButton.addEventListener('click', () => {
+        startMiningButton.disabled = true; // Вимкнути кнопку
+        startMiningButton.textContent = 'Mining in progress ⛏️...';
 
-                // Якщо більше 3-х рядків, видалити перший рядок
-                if (transferTableBody.children.length > 3) {
-                    transferTableBody.removeChild(transferTableBody.firstElementChild);
-                }
+        setTimeout(() => {
+            balance += miningPoints; // Додати монети до балансу
+            balanceDisplay.textContent = balance; // Оновити відображення балансу
 
-                // Прокрутити до останнього запису
-                const transferTableContainer = document.querySelector('.transfer-table-container');
-                transferTableContainer.scrollTop = transferTableContainer.scrollHeight;
+            // Додати інформацію до таблиці transfer
+            const now = new Date();
+            const date = now.toISOString().split('T')[0];
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>Mining</td><td>${date}</td><td>${miningPoints}</td>`;
+            transferTableBody.appendChild(row);
 
-                startMiningButton.disabled = false; // Увімкнути кнопку
-                startMiningButton.textContent = 'Start Mining'; // Відновити текст кнопки
-            }, miningDuration);
-        });
-    </script>
+            // Якщо більше 3-х рядків, видалити перший рядок
+            if (transferTableBody.children.length > 3) {
+                transferTableBody.removeChild(transferTableBody.firstElementChild);
+            }
+
+            // Прокрутити до останнього запису
+            const transferTableContainer = document.querySelector('.transfer-table-container');
+            transferTableContainer.scrollTop = transferTableContainer.scrollHeight;
+
+            startMiningButton.disabled = false; // Увімкнути кнопку
+            startMiningButton.textContent = 'Start Mining'; // Відновити текст кнопки
+        }, miningDuration);
+    });
+</script>
 </body>
 </html>
