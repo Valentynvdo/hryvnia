@@ -1,77 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet App</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest"></script>
 </head>
 <style>
-   .custom-container {
-    position: relative;
-    top: 58px; /* Відступ від верхнього краю */
-    left: 25px; /* Відступ від лівого краю */
-    width: 120px;
-    height: 60px;
-    padding: 1px;
-    border-radius: 10px;
-    box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-    background-color: #A9A9A9;  
-    opacity: 0.5;
-    z-index: 600;
-     }
-  
-  body {
-    position: relative; /* Необхідно для абсолютного позиціювання контейнера */
+  /* Заборона вертикальної прокрутки */
+body {
+    overflow-y: hidden; /* Заборонити прокрутку вгору і вниз */
+    overscroll-behavior: none; /* Вимкнути інерційну прокрутку на мобільних пристроях */
 }
 
- .container {
-    position: relative;
-    top: -29px; /* Відстань від верхнього краю */
-    left: 190px; /* Відстань від лівого краю */
-    width: 120px;
-    height: 63px;
-    display: flex;
-    justify-content: flex-start; 
-    background-color: #A9A9A9;
-    box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    z-index: 600; 
-   }
-  
-  #coin-balance {
-        position: relative;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-top: 30px;
-            text-align: right;
-            margin-left: 50px;
-            top: 12px;
+/* Для мобільних пристроїв (до 480px) */
+@media (max-width: 480px) {
+    body {
+        overflow-y: hidden; /* Заборонити вертикальну прокрутку */
     }
-  
+
+    .custom-container {
+        position: relative;
+        top: -80px; /* Відступ від верхнього краю */
+        left: 25px; /* Відступ від лівого краю */
+        width: 120px;
+        height: 60px;
+        padding: 1px;
+        border-radius: 10px;
+        box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
+        background-color: #A9A9A9;  
+        opacity: 0.5;
+        z-index: 1;
+    }
+
+    body {
+        position: relative; /* Необхідно для абсолютного позиціювання контейнера */
+    }
+
+    .container {
+        position: relative;
+        top: -29px; /* Відстань від верхнього краю */
+        left: 190px; /* Відстань від лівого краю */
+        width: 120px;
+        height: 63px;
+        display: flex;
+        justify-content: flex-start; 
+        background-color: #A9A9A9;
+        box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        z-index: 1; 
+    }
+
+    #coin-balance {
+        position: relative;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ffffff;
+        margin-top: 30px;
+        text-align: right;
+        margin-left: 50px;
+        top: 12px;
+    }
+
     body {
         background-image: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg');
         background-size: cover;
         background-position: 1px;
-        background-repeat: 1px;
+        background-repeat: no-repeat;
         height: 100vh;
         margin: 0;
         padding: 0;
     }
-  
+
     .header {
-        margin-bottom: -80px;
+        margin-bottom: -50px;
     }
 
     .header-image {
-        width: 80%;
+        position: relative;
+        width: 65%;
         height: auto;
-        border-radius: 10px;
-        margin-bottom: 40px;
-        margin-left: 30px;
-        
+        border-radius: 1px;
+        margin-bottom: 30px;
+        margin-left: 60px;
+        top: -69px;
+        z-index: 1; /* Додано пропущене = */
     }
 
     /* Wallet Section */
@@ -88,22 +101,26 @@
     }
 
     .transfer-table-header {
+        margin-top: -130px;
         font-size: 18px;
-        margin-bottom: 10px;
+        margin-bottom: 190px;
         display: flex;
         gap: 74px; /* Відступ між заголовками */
-        padding: 0 30px;
+        padding: 0 39px;
         color: white;
     }
 
-    .transfer-table-container {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        padding: 10px;
-        height: 100px; /* Фіксована висота контейнера */
-        overflow-y: auto; /* Додати прокрутку по вертикалі */
-        margin-bottom: 20px; /* Відступ віднизу */
-
+   .transfer-table-container {
+    margin-left: 10px;
+    width: 90%; 
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px; /* Встановіть відступ всередині контейнера */
+    height: 90px; /* Фіксована висота контейнера */
+    overflow-y: auto; /* Додати прокрутку по вертикалі */
+    margin-bottom: 20px; /* Відступ віднизу */
+    position: relative; /* Для використання top */
+    top: -185px; /* Зменште значення, щоб підняти контейнер */
     }
 
     .transfer-table {
@@ -119,6 +136,7 @@
 
     /* Mining Section */
     .start-mining-btn {
+        position: relative;
         background-color: #BDB76B;
         font-size: 18px;
         padding: 10px;
@@ -127,89 +145,89 @@
         cursor: pointer;
         width: 95%;
         box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
-    transition: box-shadow 0.3s ease; /* Плавний перехід */
-        margin-left: 10px;
+        transition: box-shadow 0.3s ease; /* Плавний перехід */
+        margin-left: 10px; 
+        top: -199px;
+    }
+      
+    .resizable-container {
+        width: 78%; 
+        height: 70px; 
+        background-color: #f0f0f0; 
+        padding: 30px;
+        overflow: auto;
+        top: -90px;
+        position: relative;
+        border-radius: 20px;
+        opacity: 0.1;
+        margin-left: 12px;
     }
 
-    @media (max-width: 700px) {
-        .app-container {
-            padding: 10px;
-          
-        }
-      
-      .resizable-container {
-    width: 83%; 
-    height: 100px; 
-    background-color: #f0f0f0; 
-    padding: 30px;
-    overflow: auto;
-    top: 30px;
-    position: relative;
-    border-radius: 20px;
-    opacity: 0.1;
-}
-      .icon {
-    position: relative;
-    font-size: 40px; /* Розмір шрифта для символу */
-    margin: 0 169px; /* Відстань з боків */
-    align-items: center;
-    top: -9px;
+    .icon {
+        position: relative;
+        font-size: 40px; /* Розмір шрифта для символу */
+        margin: 0 159px; /* Відстань з боків */
+        align-items: center;
+        top: -140px;
     } 
-      
+
     /* Стиль для кнопки-гамбургера */
-.hamburger {
-  position: relative;
-  width: 30px;
-  cursor: pointer;
-  margin-left: 10px;
-  top: 78px;
-}
+    .hamburger {
+        width: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+        top: 8px;
+        z-index: 10000; /* Додано пропущене = */
+    }
 
-.hamburger .line {
-  width: 100%;
-  height: 4px;
-  background-color: white;
-  margin: 6px 0;
-}
-/* Стиль для меню */
-.menu {
-  display: none; /* Сховане меню */
-  background-color: rgba(255, 255, 255, 1.0);
-  padding: 100px;
-  position: absolute;
-  top: 70px;
-  right: 10px;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
-  border-radius: 8px;
-  width: 160px;
-  height: 517px;
-  z-index: 1000;
-}
+    .hamburger .line {
+        width: 100%;
+        height: 4px;
+        background-color: white;
+        margin: 6px 0;
+    }
 
-.menu ul {
-  list-style-type: none;
-  padding: 0;
-}
+    /* Стиль для меню */
+    .menu {
+        display: none; /* Сховане меню */
+        background-color: rgba(255, 255, 255, 1.0);
+        padding: 10px;
+        position: fixed; /* Виправлено на fixed */
+        top: 0; /* Відстань від верхнього краю */
+        right: 10px; /* Відстань від правого краю */
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
+        border-radius: 8px;
+        width: 160px;
+        height: 517px;
+        z-index: 9999;
+    }
 
-.menu ul li {
-  padding: 10px 0;
-}
+    .menu ul {
+        list-style-type: none;
+        padding: 0;
+    }
 
-.menu ul li a {
-  text-decoration: none;
-  color: black;
-}
-      .close-button {
-    position: absolute;
-    top: 10px; /* Відстань від верхнього краю */
-    right: 20px; /* Відстань від правого краю */
-    font-size: 24px; /* Розмір шрифта */
-    color: #ffffff; /* Колір тексту */
-    cursor: pointer; /* Курсор у вигляді руки */
-    background: none; /* Без фону */
-    border: none; /* Без обводки */
-}
-      
+    .menu ul li {
+        padding: 10px 0;
+    }
+
+    .menu ul li a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px; /* Відстань від верхнього краю */
+        right: 20px; /* Відстань від правого краю */
+        font-size: 24px; /* Розмір шрифта */
+        color: #ffffff; /* Колір тексту */
+        cursor: pointer; /* Курсор у вигляді руки */
+        background: none; /* Без фону */
+        border: none; /* Без обводки */
+        z-index: 10000; /* Додано пропущене = */
+    }
+}      
 </style>
 <body>
 <!-- Кнопка-гамбургер -->
@@ -291,14 +309,6 @@ function toggleMenu() {
     } else {
         menu.style.display = 'block'; // Інакше відкриваємо меню
     }
-}
-      function toggleMenu() {
-  var menu = document.getElementById("menu");
-  if (menu.style.display === "none" || menu.style.display === "") {
-    menu.style.display = "block";
-  } else {
-    menu.style.display = "none";
-  }
 }
         let balance = 0;
         const miningDuration = 8000; // 8 секунд
