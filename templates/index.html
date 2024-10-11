@@ -74,32 +74,8 @@
                 margin-left: 70px;
                 top: -69px;
                 z-index: 1;
+     
             }
-          #connectButton {
-    position: relative; /* Дозволяє змінювати положення кнопки відносно її нормального розташування */
-    background-color: #2196F3;
-    border: none;
-    color: white;
-    padding: 12px 24px;
-    text-align: center;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-
-    /* Піднімає кнопку вгору і переміщує праворуч */
-    top: -40px; /* Піднімає кнопку на 20px */
-    right: -70px; /* Переміщує кнопку праворуч на 50px */
-}
-
-#connectButton:hover {
-    background-color: #1976D2;
-}
-
-#connectButton:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
 
             /* Wallet Section */
             .wallet-section h2 {
@@ -241,7 +217,7 @@
                 border: none; /* Без обводки */
                 z-index: 10000;
             }
-        }
+        
     </style>
 </head>
 <body>
@@ -265,15 +241,13 @@
         </div>
     </div>
 </div>
-  
+ 
 <div class="app-container">
     <!-- Header Section with Image -->
     <div class="header">
         <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image">
+      <button id="connectButton">Підключити Ton гаманець</button>  
     </div>
-  
-  <button id="connectButton">Підключити Ton гаманець</button>
-  
     <div class="resizable-container">
         <!-- Вміст контейнера -->
     </div>
@@ -310,21 +284,19 @@
 </div>
 
 <script>
-  const tonConnect = new TonConnect(); // Це має бути після підключення скрипту з CDN
-// Ініціалізація TonConnect
-const tonConnect = new TonConnect();
-
-// Обробка підключення до гаманця
-const connectButton = document.getElementById('connectButton');
-connectButton.addEventListener('click', async () => {
-    try {
-        await tonConnect.connectWallet();
-        const walletInfo = tonConnect.wallet;
-        console.log('Підключено до гаманця: ', walletInfo);
-    } catch (error) {
-        console.error('Помилка підключення: ', error);
-    }
-});
+  document.addEventListener('DOMContentLoaded', () => {
+            const tonConnect = new TonConnect();
+            const connectButton = document.getElementById('connectButton');
+            connectButton.addEventListener('click', async () => {
+                try {
+                    await tonConnect.connectWallet();
+                    const walletInfo = tonConnect.wallet;
+                    console.log('Підключено до гаманця: ', walletInfo);
+                } catch (error) {
+                    console.error('Помилка підключення: ', error);
+                }
+            });
+        });
     function closeModal() {
         document.getElementById('menu').style.display = 'none'; // Сховати меню
     }
