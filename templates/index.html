@@ -5,6 +5,7 @@
     <title>Wallet App</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
     <style>
         body {
             overscroll-behavior: none; /* Вимкнути інерційну прокрутку на мобільних пристроях */
@@ -21,8 +22,9 @@
         /* Для мобільних пристроїв (до 480px) */
         @media (max-width: 480px) {
             .custom-container {
+                left: 150px;
                 position: relative;
-                top: 20px; /* Відступ від верхнього краю */
+                top: -20px; /* Відступ від верхнього краю */
                 left: 25px; /* Відступ від лівого краю */
                 width: 120px;
                 height: 60px;
@@ -35,6 +37,7 @@
             }
 
             .container {
+                left: 150px;
                 position: relative;
                 top: -29px; /* Відстань від верхнього краю */
                 left: 190px; /* Відстань від лівого краю */
@@ -69,10 +72,35 @@
                 height: auto;
                 border-radius: 1px;
                 margin-bottom: 30px;
-                margin-left: 60px;
+                margin-left: 70px;
                 top: -69px;
                 z-index: 1;
             }
+          #connectButton {
+    position: relative; /* Дозволяє змінювати положення кнопки відносно її нормального розташування */
+    background-color: #2196F3;
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+
+    /* Піднімає кнопку вгору і переміщує праворуч */
+    top: -40px; /* Піднімає кнопку на 20px */
+    right: -70px; /* Переміщує кнопку праворуч на 50px */
+}
+
+#connectButton:hover {
+    background-color: #1976D2;
+}
+
+#connectButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
 
             /* Wallet Section */
             .wallet-section h2 {
@@ -88,7 +116,7 @@
             }
 
             .transfer-table-header {
-                margin-top: -30px;
+                margin-top: -60px;
                 font-size: 18px;
                 margin-bottom: 190px;
                 display: flex;
@@ -134,7 +162,7 @@
                 box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
                 transition: box-shadow 0.3s ease; /* Плавний перехід */
                 margin-left: 10px; 
-                top: -199px;
+                top: -180px;
             }
               
             .resizable-container {
@@ -143,7 +171,7 @@
                 background-color: #f0f0f0; 
                 padding: 30px;
                 overflow: auto;
-                top: 10px;
+                top: -30px;
                 position: relative;
                 border-radius: 20px;
                 opacity: 0.1;
@@ -155,7 +183,7 @@
                 font-size: 40px; /* Розмір шрифта для символу */
                 margin: 0 159px; /* Відстань з боків */
                 align-items: center;
-                top: -38px;
+                top: -78px;
             } 
 
             /* Стиль для кнопки-гамбургера */
@@ -245,6 +273,8 @@
         <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image">
     </div>
   
+  <button id="connectButton">Підключити Ton гаманець</button>
+  
     <div class="resizable-container">
         <!-- Вміст контейнера -->
     </div>
@@ -281,6 +311,22 @@
 </div>
 
 <script>
+  import { TonConnect } from '@tonconnect/sdk'; // Якщо використовуєш npm
+
+// Ініціалізація TonConnect
+const tonConnect = new TonConnect();
+
+// Обробка підключення до гаманця
+const connectButton = document.getElementById('connectButton');
+connectButton.addEventListener('click', async () => {
+    try {
+        await tonConnect.connectWallet();
+        const walletInfo = tonConnect.wallet;
+        console.log('Підключено до гаманця: ', walletInfo);
+    } catch (error) {
+        console.error('Помилка підключення: ', error);
+    }
+});
     function closeModal() {
         document.getElementById('menu').style.display = 'none'; // Сховати меню
     }
