@@ -303,6 +303,10 @@
     manifestUrl: 'https://raw.githubusercontent.com/Valentynvdo/hryvnia/main/manifest.json', // Виправлено URL на правильний
     buttonRootId: 'connect-button'
 });
+    // Відстеження зміни статусу
+tonConnectUI.gnStatusChange(status => {
+    console.log('Статус змінився:', status);
+});
 
     function closeModal() {
   document.getElementById("menu").style.display = "none" // Сховати меню
