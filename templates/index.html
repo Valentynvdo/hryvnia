@@ -1,22 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<body>
-    <div id="root"></div>
-</body>
+  <title>Підключення гаманця TON</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet App</title>
     <link rel="stylesheet" href="styles.css">
   <style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-}
-
-h1 {
-  color: #333;
-}
-        body {
+    body {
             overscroll-behavior: none; /* Вимкнути інерційну прокрутку на мобільних пристроях */
             background-image: url('https://i.ibb.co/ypLBtmy/IMG-3860.jpg');
             background-size: cover;
@@ -227,9 +218,9 @@ h1 {
                 border: none; /* Без обводки */
                 z-index: 10000;
             }
-        
-    </style>
+     </style>
 </head>
+  
 <body>
 <!-- Кнопка-гамбургер -->
 <div class="hamburger" onclick="toggleMenu()">
@@ -244,9 +235,8 @@ h1 {
         <span class="close-button" onclick="closeModal()">×</span> <!-- Кнопка закриття -->
         <div class="modal-content">
             <ul>
-                <li><a href="#">Пункт 1</a></li>
-                <li><a href="#">Пункт 2</a></li>
-                <li><a href="#">Пункт 3</a></li>
+              <li><a href="#">Пункт 1</a></li>
+              <li><a href="#">Пункт 2</a></li>                <li><a href="#">Пункт 3</a></li>
             </ul>
         </div>
     </div>
@@ -255,7 +245,12 @@ h1 {
 <div class="app-container">
     <!-- Header Section with Image -->
     <div class="header">
-        <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image">  
+        <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image"> 
+     
+    <div id="wallet-connect"></div>
+    <button id="connect-button">Підключити гаманець TON</button>
+    <p id="wallet-info"></p>
+       
     </div>
     <div class="resizable-container">
         <!-- Вміст контейнера -->
@@ -291,53 +286,82 @@ h1 {
 <div class="mining-section">
     <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
 </div>
-
+  
 <script>
-    function closeModal() {
-        document.getElementById('menu').style.display = 'none'; // Сховати меню
-    }
-
-    function toggleMenu() {
-        const menu = document.getElementById('menu');
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; // Toggle menu
-    }
-
-    let balance = 0;
-    const miningDuration = 8000; // 8 секунд
-    const miningPoints = 19;
-
-    const balanceDisplay = document.getElementById('coin-balance');
-    const startMiningButton = document.getElementById('start-mining-btn');
-    const transferTableBody = document.querySelector('#transfer-table tbody');
-
-    startMiningButton.addEventListener('click', () => {
-        startMiningButton.disabled = true; // Вимкнути кнопку
-        startMiningButton.textContent = 'Mining in progress ⛏️...';
-
-        setTimeout(() => {
-            balance += miningPoints; // Додати монети до балансу
-            balanceDisplay.textContent = balance; // Оновити відображення балансу
-
-            // Додати інформацію до таблиці transfer
-            const now = new Date();
-            const date = now.toISOString().split('T')[0];
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>Mining</td><td>${date}</td><td>${miningPoints}</td>`;
-            transferTableBody.appendChild(row);
-
-            // Якщо більше 3-х рядків, видалити перший рядок
-            if (transferTableBody.children.length > 3) {
-                transferTableBody.removeChild(transferTableBody.firstElementChild);
-            }
-
-            // Прокрутити до останнього запису
-            const transferTableContainer = document.querySelector('.transfer-table-container');
-            transferTableContainer.scrollTop = transferTableContainer.scrollHeight;
-
-            startMiningButton.disabled = false; // Увімкнути кнопку
-            startMiningButton.textContent = 'Start Mining'; // Відновити текст кнопки
-        }, miningDuration);
+document.addEventListener('DOMContentLoaded', function() {
+    // Ініціалізація TonConnect
+    const tonConnect = new TonConnect({
+        container: "wallet-connect", // ID контейнера для гаманця
+        network: "testnet" // Вкажіть мережу (testnet або mainnet)
     });
-</script>
+
+    // Отримати кнопку підключення гаманця
+    const connectWalletButton = document.getElementById('connect-button');
+
+    connectWalletButton.addEventListener("click", async () => {
+        console.log('Підключення гаманця'); // Додайте логування
+        try {
+            const connection = await tonConnect.connect(); // Запит на підключення
+
+            // Виведення інформації про підключений гаманець
+            const walletInfo = document.getElementById('wallet-info');
+            walletInfo.textContent = `Гаманець підключено: ${connection.wallet}; Адреса: ${connection.address}`;
+            console.log('Гаманець підключено:', connection);
+
+            // Можна також зберегти інформацію про гаманець, якщо потрібно
+        } catch (error) {
+            console.error('Помилка підключення гаманця:', error);
+            document.getElementById('wallet-info').textContent = 'Помилка підключення гаманця';
+        }
+    });
+});
+    function closeModal() {
+  document.getElementById("menu").style.display = "none" // Сховати меню
+}
+
+function toggleMenu() {
+  const menu = document.getElementById("menu")
+  menu.style.display = menu.style.display === "block" ? "none" : "block" // Toggle menu
+}
+
+let balance = 0
+const miningDuration = 8000 // 8 секунд
+const miningPoints = 19
+
+const balanceDisplay = document.getElementById("coin-balance")
+const startMiningButton = document.getElementById("start-mining-btn")
+const transferTableBody = document.querySelector("#transfer-table tbody")
+
+startMiningButton.addEventListener("click", () => {
+  startMiningButton.disabled = true // Вимкнути кнопку
+  startMiningButton.textContent = "Mining in progress ⛏️..."
+
+  setTimeout(() => {
+    balance += miningPoints // Додати монети до балансу
+    balanceDisplay.textContent = balance // Оновити відображення балансу
+
+    // Додати інформацію до таблиці transfer
+    const now = new Date()
+    const date = now.toISOString().split("T")[0]
+    const row = document.createElement("tr")
+    row.innerHTML = `<td>Mining</td><td>${date}</td><td>${miningPoints}</td>`
+    transferTableBody.appendChild(row)
+
+    // Якщо більше 3-х рядків, видалити перший рядок
+    if (transferTableBody.children.length > 3) {
+      transferTableBody.removeChild(transferTableBody.firstElementChild)
+    }
+
+    // Прокрутити до останнього запису
+    const transferTableContainer = document.querySelector(
+      ".transfer-table-container",
+    )
+    transferTableContainer.scrollTop = transferTableContainer.scrollHeight
+
+    startMiningButton.disabled = false // Увімкнути кнопку
+    startMiningButton.textContent = "Start Mining" // Відновити текст кнопки
+  }, miningDuration)
+})
+    </script>
 </body>
 </html>
