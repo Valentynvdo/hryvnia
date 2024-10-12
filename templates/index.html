@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <title>Підключення гаманця TON</title>
-    <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet App</title>
+  <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <link rel="stylesheet" href="styles.css">
   <style>
     body {
@@ -299,15 +299,23 @@
 </div>
   
   <script>
-       const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://raw.githubusercontent.com/Valentynvdo/hryvnia/main/manifest.json', // Виправлено URL на правильний
-    buttonRootId: 'connect-button'
-});
-    // Відстеження зміни статусу
-tonConnectUI.gnStatusChange(status => {
-    console.log('Статус змінився:', status);
-});
+      const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json', // виправлено URL
+            buttonRootId: 'connect-button'
+        });
 
+        // Відслідковування статусу підключення
+        tonConnectUI.onStatusChange(status => {
+            console.log(status); // Логування статусу
+            if (status.connected) {
+                // Код для обробки підключення гаманця
+                alert(`Connected: ${status.address}`);
+            } else {
+                // Код для обробки відключення
+                alert("Disconnected");
+            }
+        });
+    
     function closeModal() {
   document.getElementById("menu").style.display = "none" // Сховати меню
 }
