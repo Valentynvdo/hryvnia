@@ -288,33 +288,32 @@
 </div>
   
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    const connectButton = document.getElementById('connect-button');
+    const walletInfo = document.getElementById('wallet-info');
+
     // Ініціалізація TonConnect
-    const tonConnect = new TonConnect({
-        container: "wallet-connect", // ID контейнера для гаманця
-        network: "testnet" // Вкажіть мережу (testnet або mainnet)
-    });
+    const tonConnect = new TonConnect();
 
-    // Отримати кнопку підключення гаманця
-    const connectWalletButton = document.getElementById('connect-button');
-
-    connectWalletButton.addEventListener("click", async () => {
-        console.log('Підключення гаманця'); // Додайте логування
-        try {
-            const connection = await tonConnect.connect(); // Запит на підключення
-
-            // Виведення інформації про підключений гаманець
-            const walletInfo = document.getElementById('wallet-info');
-            walletInfo.textContent = `Гаманець підключено: ${connection.wallet}; Адреса: ${connection.address}`;
-            console.log('Гаманець підключено:', connection);
-
-            // Можна також зберегти інформацію про гаманець, якщо потрібно
-        } catch (error) {
-            console.error('Помилка підключення гаманця:', error);
-            document.getElementById('wallet-info').textContent = 'Помилка підключення гаманця';
+    // Обробник натискання на кнопку для підключення
+    connectButton.addEventListener('click', async () => {
+      try {
+        // Показати вікно вибору гаманця для підключення
+        await tonConnect.connect();
+        
+        // Отримати інформацію про гаманець після підключення
+        const account = tonConnect.account;
+        if (account) {
+          walletInfo.textContent = `Підключено гаманець: ${account.address}`;
+        } else {
+          walletInfo.textContent = 'Не вдалося підключити гаманець.';
         }
+      } catch (error) {
+        console.error('Помилка підключення гаманця:', error);
+        walletInfo.textContent = 'Помилка підключення гаманця.';
+      }
     });
-});
+  });
     function closeModal() {
   document.getElementById("menu").style.display = "none" // Сховати меню
 }
