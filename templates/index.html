@@ -299,9 +299,10 @@
 </div>
   
   <script>
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({     manifestUrl:'https://github.com/Valentynvdo/hryvnia/blob/main/manifest.json',
-        buttonRootId: 'connect-button'
-    });
+       const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    manifestUrl: 'https://raw.githubusercontent.com/Valentynvdo/hryvnia/main/manifest.json', // Виправлено URL на правильний
+    buttonRootId: 'connect-button'
+});
 
     function closeModal() {
   document.getElementById("menu").style.display = "none" // Сховати меню
