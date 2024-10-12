@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>Підключення гаманця TON</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@latest"></script>
+    <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet App</title>
     <link rel="stylesheet" href="styles.css">
@@ -92,7 +92,7 @@
             }
 
             .transfer-table-header {
-                margin-top: -60px;
+                margin-top: 20px;
                 font-size: 18px;
                 margin-bottom: 190px;
                 display: flex;
@@ -111,7 +111,7 @@
                 overflow-y: auto; /* Додати прокрутку по вертикалі */
                 margin-bottom: 20px; /* Відступ віднизу */
                 position: relative; /* Для використання top */
-                top: -185px; /* Зменште значення, щоб підняти контейнер */
+                top: -188px; /* Зменште значення, щоб підняти контейнер */
             }
 
             .transfer-table {
@@ -138,7 +138,7 @@
                 box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
                 transition: box-shadow 0.3s ease; /* Плавний перехід */
                 margin-left: 10px; 
-                top: -180px;
+                top: -185px;
             }
               
             .resizable-container {
@@ -152,6 +152,7 @@
                 border-radius: 20px;
                 opacity: 0.1;
                 margin-left: 12px;
+                margin-top: -50px;
             }
 
             .icon {
@@ -218,6 +219,18 @@
                 border: none; /* Без обводки */
                 z-index: 10000;
             }
+          #connect-button {
+    color: white; /* Колір тексту */
+    font-size: 16px; /* Розмір тексту */
+    padding: 12px 24px; /* Відступи всередині кнопки */
+    border: none; /* Відсутність рамки */
+    border-radius: 5px; /* Закруглені краї */
+    cursor: grab; /* Курсор для перетягування */
+    position: absolute; /* Для можливості переміщення */
+    top: 150px; /* Відстань зверху */
+    left: 80px; /* Відстань зліва */
+    z-index: 1000; /* Щоб кнопка була поверх інших елементів */
+}
      </style>
 </head>
   
@@ -247,9 +260,7 @@
     <div class="header">
         <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image"> 
      
-    <div id="wallet-connect"></div>
-    <button id="connect-button">Підключити гаманець TON</button>
-    <p id="wallet-info"></p>
+     <div id="connect-button"</div>
        
     </div>
     <div class="resizable-container">
@@ -287,33 +298,11 @@
     <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
 </div>
   
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const connectButton = document.getElementById('connect-button');
-    const walletInfo = document.getElementById('wallet-info');
-
-    // Ініціалізація TonConnect
-    const tonConnect = new TonConnect();
-
-    // Обробник натискання на кнопку для підключення
-    connectButton.addEventListener('click', async () => {
-      try {
-        // Показати вікно вибору гаманця для підключення
-        await tonConnect.connect();
-        
-        // Отримати інформацію про гаманець після підключення
-        const account = tonConnect.account;
-        if (account) {
-          walletInfo.textContent = `Підключено гаманець: ${account.address}`;
-        } else {
-          walletInfo.textContent = 'Не вдалося підключити гаманець.';
-        }
-      } catch (error) {
-        console.error('Помилка підключення гаманця:', error);
-        walletInfo.textContent = 'Помилка підключення гаманця.';
-      }
+  <script>
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({     manifestUrl:'https://github.com/Valentynvdo/hryvnia/blob/main/manifest.json',
+        buttonRootId: 'connect-button'
     });
-  });
+
     function closeModal() {
   document.getElementById("menu").style.display = "none" // Сховати меню
 }
