@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <title>Підключення гаманця TON</title>
-    <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hryvnia miner</title>
+    <title>Wallet App</title>
+  <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <link rel="stylesheet" href="styles.css">
   <style>
     body {
@@ -242,6 +242,11 @@
     top: 100px;
     left: 270px;
 }
+          .wallet-info {
+            margin-top: 20px;
+            color: white;
+            font-size: 16px;
+        }
      </style>
 </head>
   
@@ -304,22 +309,73 @@
   
   <script>
     
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({     manifestUrl:'https://github.com/Valentynvdo/hryvnia/blob/main/manifest.json',
-        buttonRootId: 'connect-button'
-    });
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json', // виправлено URL
+    buttonRootId: 'connect-button'
+});
 
-    function closeModal() {
-  document.getElementById("menu").style.display = "none" // Сховати меню
+// Відслідковування статусу підключення
+tonConnectUI.onStatusChange(status => {
+    console.log(status); // Логування статусу
+    if (status.connected) {
+        // Код для обробки підключення гаманця
+        alert(`Connected: ${status.address}`);
+    } else {
+        // Код для обробки відключення
+        alert("Disconnected");
+    }
+});
+
+function closeModal() {
+    document.getElementById("menu").style.display = "none"; // Сховати меню
 }
 
 function toggleMenu() {
-  const menu = document.getElementById("menu")
-  menu.style.display = menu.style.display === "block" ? "none" : "block" // Toggle menu
+    const menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block"; // Toggle menu
 }
-    const wheel = document.querySelector('.picker-wheel');
-const items = document.querySelectorAll('.picker-item');
-const itemWidth = items[0].clientWidth; // Ширина елемента
-let currentIndex = Math.floor(items.length / 2); // Початковий активний елемент (по центру)
+
+let balance = 0;
+const miningDuration = 8000; // 8 секунд
+const miningPoints = 19;
+
+const balanceDisplay = document.getElementById("coin-balance");
+const miningTimerDisplay = document.getElementById("mining-timer"); // Елемент для відображення таймера
+const startMiningButton = document.getElementById("start-mining-btn");
+const transferTableBody = document.querySelector("#transfer-table tbody");
+
+startMiningButton.addEventListener("click", () => {
+    startMiningButton.disabled = true; // Вимкнути кнопку
+    startMiningButton.textContent = "Mining in progress ⛏️...";
+
+    let remainingTime = miningDuration; // Залишковий час
+    const interval = 100; // Оновлення таймера кожні 100 мс
+
+    // Очищення попереднього значення таймера
+    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Відображаємо 8 секунд
+
+    const timer = setInterval(() => {
+        remainingTime -= interval; // Зменшуємо залишковий час
+        const seconds = (remainingTime / 1000).toFixed(2); // Форматування до двох десяткових
+        miningTimerDisplay.textContent = seconds; // Оновлення таймера
+
+        // Якщо час вичерпано, зупиняємо таймер
+        if (remainingTime <= 0) {
+            clearInterval(timer);
+            remainingTime = 0; // Гарантуємо, що залишковий час не буде меншим за 0
+            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Оновлюємо таймер до 0
+        }
+    }, interval);
+
+    setTimeout(() => {
+        clearInterval(timer); // Зупинити таймер
+        balance += miningPoints; // Додати монети до балансу
+        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
+
+        startMiningButton.disabled = false; // Увімкнути кнопку
+        startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
+    }, miningDuration);
+});
 
 // Встановлюємо початкове положення колеса
 updateWheelPosition();
@@ -366,30 +422,6 @@ window.addEventListener('mousemove', (event) => {
     }
 });
 
-// Додаємо підтримку для мобільних пристроїв
-let startTouchX = 0;
-
-wheel.addEventListener('touchstart', (event) => {
-    startTouchX = event.touches[0].clientX;
-});
-
-wheel.addEventListener('touchmove', (event) => {
-    const touchX = event.touches[0].clientX;
-    const deltaX = touchX - startTouchX;
-
-    if (deltaX > 50) {
-        currentIndex = (currentIndex - 1 + items.length) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startTouchX = touchX; // Оновлення стартової позиції
-    } else if (deltaX < -50) {
-        currentIndex = (currentIndex + 1) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startTouchX = touchX; // Оновлення стартової позиції
-    }
-});
-
 // Функція для оновлення позиції колеса
 function updateWheelPosition() {
     wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
@@ -403,47 +435,7 @@ function updateActiveItem(index) {
             item.classList.add('active');
         }
     });
-  }
-    
- let balance = 0;
-const miningDuration = 8000; // 8 секунд
-const miningPoints = 19;
-
-const balanceDisplay = document.getElementById("coin-balance");
-const miningTimerDisplay = document.getElementById("mining-timer");
-const startMiningButton = document.getElementById("start-mining-btn");
-
-startMiningButton.addEventListener("click", () => {
-    startMiningButton.disabled = true; // Вимкнути кнопку
-    startMiningButton.textContent = "Mining in progress ⛏️...";
-
-    let remainingTime = miningDuration; // Залишковий час
-    const interval = 100; // Оновлення таймера кожні 100 мс
-
-    // Очищення попереднього значення таймера
-    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Відображаємо 8 секунд
-
-    const timer = setInterval(() => {
-        remainingTime -= interval; // Зменшуємо залишковий час
-        const seconds = (remainingTime / 1000).toFixed(2); // Форматування до двох десяткових
-        miningTimerDisplay.textContent = seconds; // Оновлення таймера
-
-        // Якщо час вичерпано, зупиняємо таймер
-        if (remainingTime <= 0) {
-            clearInterval(timer);
-            remainingTime = 0; // Гарантуємо, що залишковий час не буде меншим за 0
-            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Оновлюємо таймер до 0
-        }
-    }, interval);
-
-    setTimeout(() => {
-        clearInterval(timer); // Зупинити таймер
-        balance += miningPoints; // Додати монети до балансу
-        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
-        startMiningButton.disabled = false; // Увімкнути кнопку
-        startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
-    }, miningDuration);
-});
+}
 
     </script>
 </body>
