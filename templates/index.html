@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <title>Підключення гаманця TON</title>
+    <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet App</title>
-  <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
+    <title>Hryvnia miner</title>
     <link rel="stylesheet" href="styles.css">
   <style>
     body {
@@ -20,11 +20,12 @@
         }
 
         /* Для мобільних пристроїв (до 480px) */
-        @media (max-width: 480px) {
+        @media (max-width: 480px)
+        {
             .custom-container {
                 left: 150px;
                 position: relative;
-                top: -20px; /* Відступ від верхнього краю */
+                top: 50px; /* Відступ від верхнього краю */
                 left: 25px; /* Відступ від лівого краю */
                 width: 120px;
                 height: 60px;
@@ -39,7 +40,7 @@
             .container {
                 left: 150px;
                 position: relative;
-                top: -29px; /* Відстань від верхнього краю */
+                top: 1px; /* Відстань від верхнього краю */
                 left: 190px; /* Відстань від лівого краю */
                 width: 120px;
                 height: 63px;
@@ -49,17 +50,6 @@
                 box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
                 border-radius: 10px;
                 z-index: 1; 
-            }
-
-            #coin-balance {
-                position: relative;
-                font-size: 18px;
-                font-weight: bold;
-                color: #ffffff;
-                margin-top: 30px;
-                text-align: right;
-                margin-left: 50px;
-                top: 12px;
             }
 
             .header {
@@ -75,84 +65,21 @@
                 margin-left: 70px;
                 top: -69px;
                 z-index: 1;
-     
-            }
-
-            /* Wallet Section */
-            .wallet-section h2 {
-                font-size: 24px;
-                margin-bottom: 15px;
-            }
-
-            /* Transfer Section */
-            .transfer-section h3 {
-                font-size: 24px;
-                margin-bottom: 10px;
-                margin-left: 30px;
-            }
-
-            .transfer-table-header {
-                margin-top: 20px;
-                font-size: 18px;
-                margin-bottom: 190px;
-                display: flex;
-                gap: 74px; /* Відступ між заголовками */
-                padding: 0 39px;
-                color: white;
-            }
-
-            .transfer-table-container {
-                margin-left: 10px;
-                width: 90%; 
-                background-color: rgba(255, 255, 255, 0.1);
-                border-radius: 10px;
-                padding: 10px; /* Встановіть відступ всередині контейнера */
-                height: 90px; /* Фіксована висота контейнера */
-                overflow-y: auto; /* Додати прокрутку по вертикалі */
-                margin-bottom: 20px; /* Відступ віднизу */
-                position: relative; /* Для використання top */
-                top: -188px; /* Зменште значення, щоб підняти контейнер */
-            }
-
-            .transfer-table {
-                width: 95%;
-                border-collapse: collapse;
-            }
-
-            .transfer-table td {
-                padding: 10px;
-                border-bottom: 1px solid #555;
-                color: white;
-            }
-
-            /* Mining Section */
-            .start-mining-btn {
-                position: relative;
-                background-color: #BDB76B;
-                font-size: 18px;
-                padding: 10px;
-                border-radius: 15px;
-                border: none;
-                cursor: pointer;
-                width: 95%;
-                box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
-                transition: box-shadow 0.3s ease; /* Плавний перехід */
-                margin-left: 10px; 
-                top: -185px;
+            
             }
               
             .resizable-container {
                 width: 78%; 
                 height: 70px; 
-                background-color: #f0f0f0; 
+                background-color: rgba(51, 51, 51, 0.3);
                 padding: 30px;
                 overflow: auto;
                 top: -30px;
                 position: relative;
                 border-radius: 20px;
-                opacity: 0.1;
                 margin-left: 12px;
-                margin-top: -50px;
+                margin-top: -100px;
+                z-index: 1;
             }
 
             .icon {
@@ -160,15 +87,16 @@
                 font-size: 40px; /* Розмір шрифта для символу */
                 margin: 0 159px; /* Відстань з боків */
                 align-items: center;
-                top: -78px;
+                top: -7px;
             } 
 
             /* Стиль для кнопки-гамбургера */
             .hamburger {
+                position: relative;
                 width: 30px;
                 cursor: pointer;
-                margin-left: 10px;
-                top: 8px;
+                left: 10px;
+                top: -255px;
                 z-index: 10000;
             }
 
@@ -219,6 +147,7 @@
                 border: none; /* Без обводки */
                 z-index: 10000;
             }
+          
           #connect-button {
     color: white; /* Колір тексту */
     font-size: 16px; /* Розмір тексту */
@@ -227,9 +156,91 @@
     border-radius: 5px; /* Закруглені краї */
     cursor: grab; /* Курсор для перетягування */
     position: absolute; /* Для можливості переміщення */
-    top: 150px; /* Відстань зверху */
-    left: 80px; /* Відстань зліва */
+    top: 180px; /* Відстань зверху */
+    left: 100px; /* Відстань зліва */
     z-index: 1000; /* Щоб кнопка була поверх інших елементів */
+}
+          body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.picker-container {
+    position: absolute;
+    left: 25px;
+    top: 1px;
+    position: relative;
+    width: 300px; /* Ширина контейнера */
+    height: 100px; /* Висота контейнера */
+    overflow: hidden;
+}
+
+.picker-wheel {
+    display: flex;
+    transition: transform 0.3s ease; /* Плавний перехід */
+}
+
+.picker-item {
+    color: #ffffff;
+    width: 100px; /* Ширина елемента */
+    height: 100px; /* Висота елемента */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 44px; /* Розмір шрифту */
+    opacity: 0.5; /* Непрозорість */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Плавний перехід */
+    flex-shrink: 0; /* Не зменшувати розмір */
+    cursor: pointer; /* Курсор у вигляді руки */
+}
+
+.picker-item:hover {
+    opacity: 1; /* Збільшення непрозорості при наведенні */
+}
+
+.picker-item.active {
+    transform: scale(1.5); /* Збільшення активного елемента */
+    opacity: 1; /* Повна непрозорість */
+}
+          /* Mining Section */
+            .start-mining-btn {
+                position: relative;
+                background-color: #BDB76B;
+                font-size: 18px;
+                padding: 10px;
+                border-radius: 15px;
+                border: none;
+                cursor: pointer;
+                width: 95%;
+                box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
+                transition: box-shadow 0.3s ease; /* Плавний перехід */
+                margin-left: 10px; 
+                top: 60px;
+              }
+          
+           #coin-balance {
+                opacity: 1;
+                position: relative;
+                font-size: 38px;
+                font-weight: bold;
+                color: #ffffff;
+                margin-top: 30px;
+                text-align: right;
+                margin-left: 120px;
+                top: 12px;
+            }
+          
+          #mining-timer {
+    position: absolute;
+    color: #808080; /* Білий колір для таймера */
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 20px; /* Відстань від балансу */
+    top: 100px;
+    left: 270px;
 }
      </style>
 </head>
@@ -260,62 +271,43 @@
     <div class="header">
         <img src="https://i.ibb.co/712Bg0T/IMG-3959.png" alt="Wallet Header" class="header-image"> 
      
-     <div id="connect-button"</div>
-       
-    </div>
-    <div class="resizable-container">
-        <!-- Вміст контейнера -->
-    </div>
-      
-    <div class="custom-container">
-        <div id="balance" style="margin-top: 5px; font-size: 18px; color: #fff;">
-            <span id="coin-balance">0</span>
-            <div class="container"></div>
-        </div>
-    </div>
-</div>
-<span class="icon">⚡️</span>
-
-<!-- Transfer Section -->
-<div class="transfer-section">
-    <div class="transfer-table-header">
-        <span>Transfer</span>
-        <span>Date</span>
-        <span>Points</span>
-    </div>
-
-    <div class="transfer-table-container">
-        <table class="transfer-table" id="transfer-table">
-            <tbody>
-                <!-- Інформація про майнінг буде додаватися тут -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Start Mining Button -->
+     <div id="connect-button"></div> 
+  
+  <!-- Start Mining Button -->
 <div class="mining-section">
     <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
 </div>
   
+      <div>
+    <div class="resizable-container">
+            <span id="coin-balance"style="color: #ffffff;">0</span>
+            <span id="mining-timer">0.00</span>
+        <!-- Вміст контейнера -->
+  </div>
+        
+    <div class="custom-container">
+            <div class="container"></div>
+        </div>
+<span class="icon">⚡️</span>
+  
+  <div class="picker-container">
+    <div class="picker-wheel">
+        <div class="picker-item">1</div>
+        <div class="picker-item">2</div>
+        <div class="picker-item">3</div>
+        <div class="picker-item">4</div>
+        <div class="picker-item">5</div>
+        <div class="picker-item">6</div>
+        <div class="picker-item">7</div>
+    </div>
+</div>
+  
   <script>
-      const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json', // виправлено URL
-            buttonRootId: 'connect-button'
-        });
-
-        // Відслідковування статусу підключення
-        tonConnectUI.onStatusChange(status => {
-            console.log(status); // Логування статусу
-            if (status.connected) {
-                // Код для обробки підключення гаманця
-                alert(`Connected: ${status.address}`);
-            } else {
-                // Код для обробки відключення
-                alert("Disconnected");
-            }
-        });
     
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({     manifestUrl:'https://github.com/Valentynvdo/hryvnia/blob/main/manifest.json',
+        buttonRootId: 'connect-button'
+    });
+
     function closeModal() {
   document.getElementById("menu").style.display = "none" // Сховати меню
 }
@@ -324,45 +316,135 @@ function toggleMenu() {
   const menu = document.getElementById("menu")
   menu.style.display = menu.style.display === "block" ? "none" : "block" // Toggle menu
 }
+    const wheel = document.querySelector('.picker-wheel');
+const items = document.querySelectorAll('.picker-item');
+const itemWidth = items[0].clientWidth; // Ширина елемента
+let currentIndex = Math.floor(items.length / 2); // Початковий активний елемент (по центру)
 
-let balance = 0
-const miningDuration = 8000 // 8 секунд
-const miningPoints = 19
+// Встановлюємо початкове положення колеса
+updateWheelPosition();
+updateActiveItem(currentIndex);
 
-const balanceDisplay = document.getElementById("coin-balance")
-const startMiningButton = document.getElementById("start-mining-btn")
-const transferTableBody = document.querySelector("#transfer-table tbody")
+// Додаємо обробник події для натискання на кнопки
+items.forEach((item, index) => {
+    item.addEventListener('click', () => {
+        currentIndex = index;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        // Додайте тут свою логіку для кнопки
+        alert(`Ви вибрали: ${item.innerText}`);
+    });
+});
+
+// Події для прокручування мишкою
+let isDragging = false;
+let startX = 0;
+
+wheel.addEventListener('mousedown', (event) => {
+    startX = event.clientX;
+    isDragging = true;
+});
+
+window.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+window.addEventListener('mousemove', (event) => {
+    if (!isDragging) return;
+    const deltaX = event.clientX - startX;
+
+    if (deltaX > 50) {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startX = event.clientX; // Оновлення стартової позиції
+    } else if (deltaX < -50) {
+        currentIndex = (currentIndex + 1) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startX = event.clientX; // Оновлення стартової позиції
+    }
+});
+
+// Додаємо підтримку для мобільних пристроїв
+let startTouchX = 0;
+
+wheel.addEventListener('touchstart', (event) => {
+    startTouchX = event.touches[0].clientX;
+});
+
+wheel.addEventListener('touchmove', (event) => {
+    const touchX = event.touches[0].clientX;
+    const deltaX = touchX - startTouchX;
+
+    if (deltaX > 50) {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startTouchX = touchX; // Оновлення стартової позиції
+    } else if (deltaX < -50) {
+        currentIndex = (currentIndex + 1) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startTouchX = touchX; // Оновлення стартової позиції
+    }
+});
+
+// Функція для оновлення позиції колеса
+function updateWheelPosition() {
+    wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
+}
+
+// Функція для оновлення активного елемента
+function updateActiveItem(index) {
+    items.forEach((item, i) => {
+        item.classList.remove('active');
+        if (i === index) {
+            item.classList.add('active');
+        }
+    });
+  }
+    
+ let balance = 0;
+const miningDuration = 8000; // 8 секунд
+const miningPoints = 19;
+
+const balanceDisplay = document.getElementById("coin-balance");
+const miningTimerDisplay = document.getElementById("mining-timer");
+const startMiningButton = document.getElementById("start-mining-btn");
 
 startMiningButton.addEventListener("click", () => {
-  startMiningButton.disabled = true // Вимкнути кнопку
-  startMiningButton.textContent = "Mining in progress ⛏️..."
+    startMiningButton.disabled = true; // Вимкнути кнопку
+    startMiningButton.textContent = "Mining in progress ⛏️...";
 
-  setTimeout(() => {
-    balance += miningPoints // Додати монети до балансу
-    balanceDisplay.textContent = balance // Оновити відображення балансу
+    let remainingTime = miningDuration; // Залишковий час
+    const interval = 100; // Оновлення таймера кожні 100 мс
 
-    // Додати інформацію до таблиці transfer
-    const now = new Date()
-    const date = now.toISOString().split("T")[0]
-    const row = document.createElement("tr")
-    row.innerHTML = `<td>Mining</td><td>${date}</td><td>${miningPoints}</td>`
-    transferTableBody.appendChild(row)
+    // Очищення попереднього значення таймера
+    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Відображаємо 8 секунд
 
-    // Якщо більше 3-х рядків, видалити перший рядок
-    if (transferTableBody.children.length > 3) {
-      transferTableBody.removeChild(transferTableBody.firstElementChild)
-    }
+    const timer = setInterval(() => {
+        remainingTime -= interval; // Зменшуємо залишковий час
+        const seconds = (remainingTime / 1000).toFixed(2); // Форматування до двох десяткових
+        miningTimerDisplay.textContent = seconds; // Оновлення таймера
 
-    // Прокрутити до останнього запису
-    const transferTableContainer = document.querySelector(
-      ".transfer-table-container",
-    )
-    transferTableContainer.scrollTop = transferTableContainer.scrollHeight
+        // Якщо час вичерпано, зупиняємо таймер
+        if (remainingTime <= 0) {
+            clearInterval(timer);
+            remainingTime = 0; // Гарантуємо, що залишковий час не буде меншим за 0
+            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Оновлюємо таймер до 0
+        }
+    }, interval);
 
-    startMiningButton.disabled = false // Увімкнути кнопку
-    startMiningButton.textContent = "Start Mining" // Відновити текст кнопки
-  }, miningDuration)
-})
+    setTimeout(() => {
+        clearInterval(timer); // Зупинити таймер
+        balance += miningPoints; // Додати монети до балансу
+        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
+        startMiningButton.disabled = false; // Увімкнути кнопку
+        startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
+    }, miningDuration);
+});
+
     </script>
 </body>
 </html>
