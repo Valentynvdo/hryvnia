@@ -363,6 +363,8 @@ startMiningButton.addEventListener("click", () => {
 const items = document.querySelectorAll('.picker-item');
 const itemWidth = items[0].clientWidth; // Ширина елемента
 let currentIndex = Math.floor(items.length / 2); // Початковий активний елемент (по центру)
+let isDragging = false;
+let startTouchX = 0;
 
 // Встановлюємо початкове положення колеса
 updateWheelPosition();
@@ -374,68 +376,49 @@ items.forEach((item, index) => {
         currentIndex = index;
         updateWheelPosition();
         updateActiveItem(currentIndex);
-        // Додайте тут свою логіку для кнопки
         alert(`Ви вибрали: ${item.innerText}`);
     });
 });
 
-// Події для прокручування мишкою
-let isDragging = false;
-let startX = 0;
-
-wheel.addEventListener('mousedown', (event) => {
-    startX = event.clientX;
+// Події для мобільних пристроїв
+wheel.addEventListener('touchstart', (event) => {
+    startTouchX = event.touches[0].clientX;
     isDragging = true;
 });
 
-window.addEventListener('mouseup', () => {
+wheel.addEventListener('touchend', () => {
     isDragging = false;
 });
 
-window.addEventListener('mousemove', (event) => {
-    if (!isDragging) return;
-    const deltaX = event.clientX - startX;
-
-    if (deltaX > 50) {
-        currentIndex = (currentIndex - 1 + items.length) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startX = event.clientX; // Оновлення стартової позиції
-    } else if (deltaX < -50) {
-        currentIndex = (currentIndex + 1) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startX = event.clientX; // Оновлення стартової позиції
-    }
-});
-
-// Додаємо підтримку для мобільних пристроїв
-let startTouchX = 0;
-
-wheel.addEventListener('touchstart', (event) => {
-    startTouchX = event.touches[0].clientX;
-});
-
 wheel.addEventListener('touchmove', (event) => {
+    if (!isDragging) return;
+    
     const touchX = event.touches[0].clientX;
     const deltaX = touchX - startTouchX;
 
     if (deltaX > 50) {
         currentIndex = (currentIndex - 1 + items.length) % items.length;
-        updateWheelPosition();
         updateActiveItem(currentIndex);
+        animateWheel(currentIndex);
         startTouchX = touchX; // Оновлення стартової позиції
     } else if (deltaX < -50) {
         currentIndex = (currentIndex + 1) % items.length;
-        updateWheelPosition();
         updateActiveItem(currentIndex);
+        animateWheel(currentIndex);
         startTouchX = touchX; // Оновлення стартової позиції
     }
 });
 
-// Функція для оновлення позиції колеса з плавною анімацією
+// Функція для плавної анімації
+function animateWheel(index) {
+    requestAnimationFrame(() => {
+        updateWheelPosition();
+    });
+}
+
+// Функція для оновлення позиції колеса
 function updateWheelPosition() {
-    wheel.style.transition = 'transform 0.5s ease'; // Додаємо плавну анімацію
+    wheel.style.transition = 'transform 0.5s ease'; // Плавна анімація
     wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
 }
 
