@@ -19,36 +19,6 @@
             overflow: hidden; /* Заборонити вертикальну прокрутку */
         }
 
-            .custom-container {
-                left: 150px;
-                position: relative;
-                top: 10px; /* Відступ від верхнього краю */
-                left: 25px; /* Відступ від лівого краю */
-                width: 120px;
-                height: 60px;
-                padding: 1px;
-                border-radius: 10px;
-                box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-                background-color: #A9A9A9;  
-                opacity: 0.5;
-                z-index: 1;
-            }
-
-            .container {
-                left: 150px;
-                position: relative;
-                top: 1px; /* Відстань від верхнього краю */
-                left: 190px; /* Відстань від лівого краю */
-                width: 120px;
-                height: 63px;
-                display: flex;
-                justify-content: flex-start; 
-                background-color: #A9A9A9;
-                box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-                z-index: 1; 
-            }
-
             .header {
                 margin-bottom: -90px;
             }
@@ -60,7 +30,7 @@
                 border-radius: 1px;
                 margin-bottom: 30px;
                 margin-left: 25px;
-                top: -99px;
+                top: -170px;
                 z-index: 1;
             
             }
@@ -71,21 +41,13 @@
                 background-color: rgba(51, 51, 51, 0.3);
                 padding: 30px;
                 overflow: auto;
-                top: -70px;
+                top: -130px;
                 position: relative;
                 border-radius: 20px;
                 margin-left: 1px;
                 margin-top: -100px;
                 z-index: 1;
             }
-
-            .icon {
-                position: relative;
-                font-size: 40px; /* Розмір шрифта для символу */
-                margin: 0 159px; /* Відстань з боків */
-                align-items: center;
-                top: -45px;
-            } 
 
             /* Стиль для кнопки-гамбургера */
             .hamburger {
@@ -154,7 +116,7 @@
     cursor: grab; /* Курсор для перетягування */
     position: absolute; /* Для можливості переміщення */
     top: 230px; /* Відстань зверху */
-    left: 110px; /* Відстань зліва */
+    left: 100px; /* Відстань зліва */
     z-index: 1000; /* Щоб кнопка була поверх інших елементів */
 }
           body {
@@ -215,7 +177,7 @@
                 box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
                 transition: box-shadow 0.3s ease; /* Плавний перехід */
                 margin-left: 1px; 
-                top: 18px;
+                top: -40px;
               }
           
            #coin-balance {
@@ -308,11 +270,6 @@
             <span id="mining-timer">0.00</span>
         <!-- Вміст контейнера -->
   </div>
-        
-    <div class="custom-container">
-            <div class="container"></div>
-        </div>
-<span class="icon">⚡️</span>
   
   <div class="picker-container">
     <div class="picker-wheel">
@@ -397,6 +354,7 @@ startMiningButton.addEventListener("click", () => {
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
+    
     const wheel = document.querySelector('.picker-wheel');
 const items = document.querySelectorAll('.picker-item');
 const itemWidth = items[0].clientWidth; // Ширина елемента
