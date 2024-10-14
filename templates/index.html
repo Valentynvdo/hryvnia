@@ -142,6 +142,11 @@
                 margin-left: 1px; 
                 top: -40px;
               }
+    
+    .picker-wheel {
+    scroll-behavior: smooth;
+}
+    
     body {
     display: flex;
     justify-content: center;
@@ -163,16 +168,18 @@
 }
 
 .picker-item {
-    width: 80px; /* Ширина елемента */
+    width: 90px; /* Ширина елемента */
     height: 80px; /* Висота елемента */
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px; /* Розмір шрифту */
+    font-size: 44px; /* Розмір шрифту */
     opacity: 0.5; /* Непрозорість */
     transition: transform 0.3s ease, opacity 0.3s ease; /* Плавний перехід */
     flex-shrink: 0; /* Не зменшувати розмір */
     cursor: pointer; /* Курсор у вигляді руки */
+    border: none; /* Без обрамлення */
+    background-color: transparent; /* Прозорий фон */
 }
 
 .picker-item:hover {
@@ -183,6 +190,7 @@
     transform: scale(1.5); /* Збільшення активного елемента */
     opacity: 1; /* Повна непрозорість */
 }
+
           
            #coin-balance {
                 opacity: 1;
@@ -358,7 +366,8 @@ startMiningButton.addEventListener("click", () => {
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
-    const wheel = document.querySelector('.picker-wheel');
+    
+   const wheel = document.querySelector('.picker-wheel');
 const items = document.querySelectorAll('.picker-item');
 const itemWidth = items[0].clientWidth; // Ширина елемента
 let currentIndex = Math.floor(items.length / 2); // Початковий активний елемент (по центру)
@@ -373,6 +382,8 @@ items.forEach((item, index) => {
         currentIndex = index;
         updateWheelPosition();
         updateActiveItem(currentIndex);
+        // Додайте тут свою логіку для кнопки
+        alert(`Ви вибрали: ${item.innerText}`);
     });
 });
 
@@ -406,6 +417,30 @@ window.addEventListener('mousemove', (event) => {
     }
 });
 
+// Додаємо підтримку для мобільних пристроїв
+let startTouchX = 0;
+
+wheel.addEventListener('touchstart', (event) => {
+    startTouchX = event.touches[0].clientX;
+});
+
+wheel.addEventListener('touchmove', (event) => {
+    const touchX = event.touches[0].clientX;
+    const deltaX = touchX - startTouchX;
+
+    if (deltaX > 50) {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startTouchX = touchX; // Оновлення стартової позиції
+    } else if (deltaX < -50) {
+        currentIndex = (currentIndex + 1) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startTouchX = touchX; // Оновлення стартової позиції
+    }
+});
+
 // Функція для оновлення позиції колеса
 function updateWheelPosition() {
     wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
@@ -421,9 +456,6 @@ function updateActiveItem(index) {
     });
 }
     
-    
-
-
     </script>
 </body>
 </html>
