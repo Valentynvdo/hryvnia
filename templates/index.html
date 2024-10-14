@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <title>Підключення гаманця TON</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet App</title>
   <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <link rel="stylesheet" href="styles.css">
   <style>
@@ -22,7 +22,7 @@
             .custom-container {
                 left: 150px;
                 position: relative;
-                top: 50px; /* Відступ від верхнього краю */
+                top: 10px; /* Відступ від верхнього краю */
                 left: 25px; /* Відступ від лівого краю */
                 width: 120px;
                 height: 60px;
@@ -60,7 +60,7 @@
                 border-radius: 1px;
                 margin-bottom: 30px;
                 margin-left: 25px;
-                top: -69px;
+                top: -99px;
                 z-index: 1;
             
             }
@@ -84,7 +84,7 @@
                 font-size: 40px; /* Розмір шрифта для символу */
                 margin: 0 159px; /* Відстань з боків */
                 align-items: center;
-                top: -7px;
+                top: -45px;
             } 
 
             /* Стиль для кнопки-гамбургера */
@@ -93,7 +93,7 @@
                 width: 30px;
                 cursor: pointer;
                 left: 10px;
-                top: -255px;
+                top: -320px;
                 z-index: 10000;
             }
 
@@ -153,7 +153,7 @@
     border-radius: 5px; /* Закруглені краї */
     cursor: grab; /* Курсор для перетягування */
     position: absolute; /* Для можливості переміщення */
-    top: 210px; /* Відстань зверху */
+    top: 230px; /* Відстань зверху */
     left: 110px; /* Відстань зліва */
     z-index: 1000; /* Щоб кнопка була поверх інших елементів */
 }
@@ -167,8 +167,8 @@
 
 .picker-container {
     position: absolute;
-    left: 25px;
-    top: 1px;
+    left: 30px;
+    top: -10px;
     position: relative;
     width: 300px; /* Ширина контейнера */
     height: 100px; /* Висота контейнера */
@@ -214,8 +214,8 @@
                 width: 95%;
                 box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
                 transition: box-shadow 0.3s ease; /* Плавний перехід */
-                margin-left: 10px; 
-                top: 60px;
+                margin-left: 1px; 
+                top: 18px;
               }
           
            #coin-balance {
@@ -245,16 +245,27 @@
             font-size: 16px;
         }
     
+    @media only screen and (max-width: 600px) {
     body {
-    max-width: 400px; /* Максимальна ширина, наприклад, 400 пікселів — це приблизна ширина смартфона */
-    margin: 0 auto; /* Вирівнювання сторінки по центру на великих екранах */
-    padding: 10px; /* Трохи відступів для гарного вигляду */
+        transform: scale(1);
+        transform-origin: top left;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
 }
-      
-@media (max-width: 768px) {
-  .container {
-    grid-template-columns: 1fr; /* Один стовпчик на мобільних пристроях */
-  }          
+    @media only screen and (orientation: portrait) {
+    body {
+        /* стилі для портретної орієнтації */
+    }
+}
+
+@media only screen and (orientation: landscape) {
+    body {
+        /* стилі для пейзажної орієнтації */
+    }
+}
+           
      </style>
 </head>
   
@@ -305,13 +316,13 @@
   
   <div class="picker-container">
     <div class="picker-wheel">
-        <div class="picker-item">1</div>
-        <div class="picker-item">2</div>
-        <div class="picker-item">3</div>
-        <div class="picker-item">4</div>
-        <div class="picker-item">5</div>
-        <div class="picker-item">6</div>
-        <div class="picker-item">7</div>
+        <div class="picker-item">👬</div>
+        <div class="picker-item">🏦</div>
+        <div class="picker-item">💰</div>
+        <div class="picker-item">👛</div>
+        <div class="picker-item">🗺️</div>
+        <div class="picker-item">ℹ️</div>
+        <div class="picker-item">🛠️</div>
     </div>
 </div>
   
@@ -386,12 +397,10 @@ startMiningButton.addEventListener("click", () => {
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
-
-// Кодування колеса
-let currentIndex = 0;
-const itemWidth = 100; // Ширина кожного елемента
-const wheel = document.getElementById('your-wheel-id'); // Змінити на фактичний ID
-const items = document.querySelectorAll('.your-item-class'); // Змінити на фактичний клас
+    const wheel = document.querySelector('.picker-wheel');
+const items = document.querySelectorAll('.picker-item');
+const itemWidth = items[0].clientWidth; // Ширина елемента
+let currentIndex = Math.floor(items.length / 2); // Початковий активний елемент (по центру)
 
 // Встановлюємо початкове положення колеса
 updateWheelPosition();
@@ -403,6 +412,7 @@ items.forEach((item, index) => {
         currentIndex = index;
         updateWheelPosition();
         updateActiveItem(currentIndex);
+        // Додайте тут свою логіку для кнопки
         alert(`Ви вибрали: ${item.innerText}`);
     });
 });
@@ -463,8 +473,7 @@ wheel.addEventListener('touchmove', (event) => {
 
 // Функція для оновлення позиції колеса
 function updateWheelPosition() {
-    const containerWidth = wheel.offsetWidth; // Динамічне визначення ширини контейнера
-    wheel.style.transform = `translateX(${-currentIndex * itemWidth + (containerWidth / 2) - (itemWidth / 2)}px)`;
+    wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
 }
 
 // Функція для оновлення активного елемента
@@ -476,6 +485,8 @@ function updateActiveItem(index) {
         }
     });
 }
+
+
     </script>
 </body>
 </html>
