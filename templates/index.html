@@ -19,9 +19,6 @@
             overflow: hidden; /* Заборонити вертикальну прокрутку */
         }
 
-        /* Для мобільних пристроїв (до 480px) */
-        @media (max-width: 480px)
-        {
             .custom-container {
                 left: 150px;
                 position: relative;
@@ -63,7 +60,7 @@
                 border-radius: 1px;
                 margin-bottom: 30px;
                 margin-left: 70px;
-                top: -69px;
+                top: -110px;
                 z-index: 1;
             
             }
@@ -247,6 +244,17 @@
             color: white;
             font-size: 16px;
         }
+    
+    body {
+    max-width: 400px; /* Максимальна ширина, наприклад, 400 пікселів — це приблизна ширина смартфона */
+    margin: 0 auto; /* Вирівнювання сторінки по центру на великих екранах */
+    padding: 10px; /* Трохи відступів для гарного вигляду */
+}
+      
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr; /* Один стовпчик на мобільних пристроях */
+  }          
      </style>
 </head>
   
@@ -282,7 +290,7 @@
 <div class="mining-section">
     <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
 </div>
-  
+      
       <div>
     <div class="resizable-container">
             <span id="coin-balance"style="color: #ffffff;">0</span>
@@ -309,8 +317,9 @@
   
   <script>
     
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json', // виправлено URL
+   // Ініціалізація TonConnectUI
+const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
     buttonRootId: 'connect-button'
 });
 
@@ -318,14 +327,13 @@
 tonConnectUI.onStatusChange(status => {
     console.log(status); // Логування статусу
     if (status.connected) {
-        // Код для обробки підключення гаманця
         alert(`Connected: ${status.address}`);
     } else {
-        // Код для обробки відключення
         alert("Disconnected");
     }
 });
 
+// Функції для роботи з меню
 function closeModal() {
     document.getElementById("menu").style.display = "none"; // Сховати меню
 }
@@ -335,15 +343,18 @@ function toggleMenu() {
     menu.style.display = menu.style.display === "block" ? "none" : "block"; // Toggle menu
 }
 
+// Змінні для відстеження балансу та видобутку
 let balance = 0;
 const miningDuration = 8000; // 8 секунд
 const miningPoints = 19;
 
+// Знайти елементи на сторінці
 const balanceDisplay = document.getElementById("coin-balance");
-const miningTimerDisplay = document.getElementById("mining-timer"); // Елемент для відображення таймера
 const startMiningButton = document.getElementById("start-mining-btn");
+const miningTimerDisplay = document.getElementById("mining-timer");
 const transferTableBody = document.querySelector("#transfer-table tbody");
 
+// Додавання обробника для кнопки початку видобутку
 startMiningButton.addEventListener("click", () => {
     startMiningButton.disabled = true; // Вимкнути кнопку
     startMiningButton.textContent = "Mining in progress ⛏️...";
@@ -371,11 +382,16 @@ startMiningButton.addEventListener("click", () => {
         clearInterval(timer); // Зупинити таймер
         balance += miningPoints; // Додати монети до балансу
         balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
-
         startMiningButton.disabled = false; // Увімкнути кнопку
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
+
+// Кодування колеса
+let currentIndex = 0;
+const itemWidth = 100; // Ширина кожного елемента
+const wheel = document.getElementById('your-wheel-id'); // Змінити на фактичний ID
+const items = document.querySelectorAll('.your-item-class'); // Змінити на фактичний клас
 
 // Встановлюємо початкове положення колеса
 updateWheelPosition();
@@ -387,7 +403,6 @@ items.forEach((item, index) => {
         currentIndex = index;
         updateWheelPosition();
         updateActiveItem(currentIndex);
-        // Додайте тут свою логіку для кнопки
         alert(`Ви вибрали: ${item.innerText}`);
     });
 });
@@ -422,9 +437,34 @@ window.addEventListener('mousemove', (event) => {
     }
 });
 
+// Додаємо підтримку для мобільних пристроїв
+let startTouchX = 0;
+
+wheel.addEventListener('touchstart', (event) => {
+    startTouchX = event.touches[0].clientX;
+});
+
+wheel.addEventListener('touchmove', (event) => {
+    const touchX = event.touches[0].clientX;
+    const deltaX = touchX - startTouchX;
+
+    if (deltaX > 50) {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startTouchX = touchX; // Оновлення стартової позиції
+    } else if (deltaX < -50) {
+        currentIndex = (currentIndex + 1) % items.length;
+        updateWheelPosition();
+        updateActiveItem(currentIndex);
+        startTouchX = touchX; // Оновлення стартової позиції
+    }
+});
+
 // Функція для оновлення позиції колеса
 function updateWheelPosition() {
-    wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
+    const containerWidth = wheel.offsetWidth; // Динамічне визначення ширини контейнера
+    wheel.style.transform = `translateX(${-currentIndex * itemWidth + (containerWidth / 2) - (itemWidth / 2)}px)`;
 }
 
 // Функція для оновлення активного елемента
@@ -436,7 +476,6 @@ function updateActiveItem(index) {
         }
     });
 }
-
     </script>
 </body>
 </html>
