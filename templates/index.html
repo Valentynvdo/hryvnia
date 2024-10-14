@@ -127,47 +127,6 @@
     background-color: #f0f0f0;
 }
     
-    .picker-wheel {
-    transition: transform 0.5s ease; /* Додає плавну анімацію для прокрутки */
-}
-
-.picker-container {
-    position: absolute;
-    left: 30px;
-    top: -10px;
-    position: relative;
-    width: 300px; /* Ширина контейнера */
-    height: 100px; /* Висота контейнера */
-    overflow: hidden;
-}
-
-.picker-wheel {
-    display: flex;
-    transition: transform 0.3s ease; /* Плавний перехід */
-}
-
-.picker-item {
-    color: #ffffff;
-    width: 100px; /* Ширина елемента */
-    height: 100px; /* Висота елемента */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 44px; /* Розмір шрифту */
-    opacity: 0.5; /* Непрозорість */
-    transition: transform 0.3s ease, opacity 0.3s ease; /* Плавний перехід */
-    flex-shrink: 0; /* Не зменшувати розмір */
-    cursor: pointer; /* Курсор у вигляді руки */
-}
-
-.picker-item:hover {
-    opacity: 1; /* Збільшення непрозорості при наведенні */
-}
-
-.picker-item.active {
-    transform: scale(1.5); /* Збільшення активного елемента */
-    opacity: 1; /* Повна непрозорість */
-}
           /* Mining Section */
             .start-mining-btn {
                 position: relative;
@@ -183,6 +142,47 @@
                 margin-left: 1px; 
                 top: -40px;
               }
+    body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.picker-container {
+    position: relative;
+    width: 300px; /* Ширина контейнера */
+    height: 100px; /* Висота контейнера */
+    overflow: hidden;
+}
+
+.picker-wheel {
+    display: flex;
+    transition: transform 0.3s ease; /* Плавний перехід */
+}
+
+.picker-item {
+    width: 80px; /* Ширина елемента */
+    height: 80px; /* Висота елемента */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; /* Розмір шрифту */
+    opacity: 0.5; /* Непрозорість */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Плавний перехід */
+    flex-shrink: 0; /* Не зменшувати розмір */
+    cursor: pointer; /* Курсор у вигляді руки */
+}
+
+.picker-item:hover {
+    opacity: 1; /* Збільшення непрозорості при наведенні */
+}
+
+.picker-item.active {
+    transform: scale(1.5); /* Збільшення активного елемента */
+    opacity: 1; /* Повна непрозорість */
+}
           
            #coin-balance {
                 opacity: 1;
@@ -358,13 +358,10 @@ startMiningButton.addEventListener("click", () => {
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
-    
     const wheel = document.querySelector('.picker-wheel');
 const items = document.querySelectorAll('.picker-item');
 const itemWidth = items[0].clientWidth; // Ширина елемента
 let currentIndex = Math.floor(items.length / 2); // Початковий активний елемент (по центру)
-let isDragging = false;
-let startTouchX = 0;
 
 // Встановлюємо початкове положення колеса
 updateWheelPosition();
@@ -376,49 +373,41 @@ items.forEach((item, index) => {
         currentIndex = index;
         updateWheelPosition();
         updateActiveItem(currentIndex);
-        alert(`Ви вибрали: ${item.innerText}`);
     });
 });
 
-// Події для мобільних пристроїв
-wheel.addEventListener('touchstart', (event) => {
-    startTouchX = event.touches[0].clientX;
+// Події для прокручування мишкою
+let isDragging = false;
+let startX = 0;
+
+wheel.addEventListener('mousedown', (event) => {
+    startX = event.clientX;
     isDragging = true;
 });
 
-wheel.addEventListener('touchend', () => {
+window.addEventListener('mouseup', () => {
     isDragging = false;
 });
 
-wheel.addEventListener('touchmove', (event) => {
+window.addEventListener('mousemove', (event) => {
     if (!isDragging) return;
-    
-    const touchX = event.touches[0].clientX;
-    const deltaX = touchX - startTouchX;
+    const deltaX = event.clientX - startX;
 
     if (deltaX > 50) {
         currentIndex = (currentIndex - 1 + items.length) % items.length;
+        updateWheelPosition();
         updateActiveItem(currentIndex);
-        animateWheel(currentIndex);
-        startTouchX = touchX; // Оновлення стартової позиції
+        startX = event.clientX; // Оновлення стартової позиції
     } else if (deltaX < -50) {
         currentIndex = (currentIndex + 1) % items.length;
+        updateWheelPosition();
         updateActiveItem(currentIndex);
-        animateWheel(currentIndex);
-        startTouchX = touchX; // Оновлення стартової позиції
+        startX = event.clientX; // Оновлення стартової позиції
     }
 });
 
-// Функція для плавної анімації
-function animateWheel(index) {
-    requestAnimationFrame(() => {
-        updateWheelPosition();
-    });
-}
-
 // Функція для оновлення позиції колеса
 function updateWheelPosition() {
-    wheel.style.transition = 'transform 0.5s ease'; // Плавна анімація
     wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
 }
 
@@ -431,6 +420,8 @@ function updateActiveItem(index) {
         }
     });
 }
+    
+    
 
 
     </script>
