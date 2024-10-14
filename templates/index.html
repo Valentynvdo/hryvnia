@@ -30,7 +30,7 @@
                 border-radius: 1px;
                 margin-bottom: 30px;
                 margin-left: 25px;
-                top: -170px;
+                top: -175px;
                 z-index: 1;
             
             }
@@ -116,7 +116,7 @@
     cursor: grab; /* Курсор для перетягування */
     position: absolute; /* Для можливості переміщення */
     top: 230px; /* Відстань зверху */
-    left: 100px; /* Відстань зліва */
+    left: 95px; /* Відстань зліва */
     z-index: 1000; /* Щоб кнопка була поверх інших елементів */
 }
           body {
@@ -125,6 +125,10 @@
     align-items: center;
     height: 100vh;
     background-color: #f0f0f0;
+}
+    
+    .picker-wheel {
+    transition: transform 0.5s ease; /* Додає плавну анімацію для прокрутки */
 }
 
 .picker-container {
@@ -429,8 +433,9 @@ wheel.addEventListener('touchmove', (event) => {
     }
 });
 
-// Функція для оновлення позиції колеса
+// Функція для оновлення позиції колеса з плавною анімацією
 function updateWheelPosition() {
+    wheel.style.transition = 'transform 0.5s ease'; // Додаємо плавну анімацію
     wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
 }
 
