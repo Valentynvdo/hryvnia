@@ -142,54 +142,6 @@
                 margin-left: 1px; 
                 top: -40px;
               }
-    
-    .picker-wheel {
-    scroll-behavior: smooth;
-}
-    
-    body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-}
-
-.picker-container {
-    position: relative;
-    width: 300px; /* Ширина контейнера */
-    height: 100px; /* Висота контейнера */
-    overflow: hidden;
-}
-
-.picker-wheel {
-    display: flex;
-    transition: transform 0.3s ease; /* Плавний перехід */
-}
-
-.picker-item {
-    width: 90px; /* Ширина елемента */
-    height: 80px; /* Висота елемента */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 44px; /* Розмір шрифту */
-    opacity: 0.5; /* Непрозорість */
-    transition: transform 0.3s ease, opacity 0.3s ease; /* Плавний перехід */
-    flex-shrink: 0; /* Не зменшувати розмір */
-    cursor: pointer; /* Курсор у вигляді руки */
-    border: none; /* Без обрамлення */
-    background-color: transparent; /* Прозорий фон */
-}
-
-.picker-item:hover {
-    opacity: 1; /* Збільшення непрозорості при наведенні */
-}
-
-.picker-item.active {
-    transform: scale(1.5); /* Збільшення активного елемента */
-    opacity: 1; /* Повна непрозорість */
-}
 
           
            #coin-balance {
@@ -213,6 +165,59 @@
     top: 100px;
     left: 270px;
 }
+    .menu-container {
+    left: 45px;
+    position: relative;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; /* Центруємо кнопки */
+    margin: -60px; 
+    max-width: 450px; /* Зменшено максимальну ширину контейнера */
+}
+
+.menu-button {
+    width: 90px; /* Ширина кнопки */
+    height: 70px; /* Висота кнопки */
+    background-color: #333333; /* Прозорий фон */
+    color: #FFFFFF;
+    border: none; /* Без обрамлення */
+    border-radius: 10px; /* Злегка закруглені кути */
+    display: flex; /* Використовуємо флекс-контейнер */
+    flex-direction: column; /* Вирівнюємо в стовпчик */
+    align-items: center; /* Центруємо по горизонталі */
+    justify-content: center; /* Центруємо по вертикалі */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ефект глибини */
+    transition: background-color 0.3s, transform 0.3s; /* Анімація для фону та трансформації */
+    cursor: pointer; /* Курсор у вигляді руки */
+    margin: 10px; /* Відступ між кнопками */
+}
+
+.menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.8); /* Збільшення непрозорості при наведенні */
+    transform: translateY(-2px); /* Легкий підйом при наведенні */
+}
+
+.menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Збільшення непрозорості при наведенні */
+    transform: translateY(-2px); /* Легкий підйом при наведенні */
+    cursor: pointer; /* Курсор у вигляді руки */
+    margin: 10px; /* Відступ між кнопками */
+}
+
+.menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.8); /* Збільшення непрозорості при наведенні */
+    transform: translateY(-2px); /* Легкий підйом при наведенні */
+}
+
+.menu-button span {
+    margin-top: 5px; /* Відстань між іконкою та текстом */
+    font-size: 13px; /* Розмір шрифту для тексту */
+    text-align: center; /* Центруємо текст */
+    overflow: hidden; /* Сховати текст, що виходить за межі */
+    white-space: nowrap; /* Уникнути перенесення тексту */
+    text-overflow: ellipsis; /* Додати три крапки, якщо текст не вміщується */
+}
+   
           .wallet-info {
             margin-top: 20px;
             color: white;
@@ -283,16 +288,31 @@
         <!-- Вміст контейнера -->
   </div>
   
-  <div class="picker-container">
-    <div class="picker-wheel">
-        <div class="picker-item">👬</div>
-        <div class="picker-item">🏦</div>
-        <div class="picker-item">💰</div>
-        <div class="picker-item">👛</div>
-        <div class="picker-item">🗺️</div>
-        <div class="picker-item">ℹ️</div>
-        <div class="picker-item">🛠️</div>
-    </div>
+ <div class="menu-container">
+    <button class="menu-button bank" onclick="openModal('modal-bank')">
+        <span>🏦</span>
+        <span>Банк</span>
+    </button>
+    <button class="menu-button wallet" onclick="openModal('modal-wallet')">
+        <span>👛</span>
+        <span>Гаманець</span>
+    </button>
+    <button class="menu-button earn" onclick="openModal('modal-earn')">
+        <span>💰</span>
+        <span>Заробіток</span>
+    </button>
+    <button class="menu-button friends" onclick="openModal('modal-friends')">
+        <span>👬</span>
+        <span>Друзі</span>
+    </button>
+      <button class="menu-button settings" onclick="openModal('modal-settings')">
+        <span>🛠️</span>
+        <span>Налаштування</span>
+    </button>
+      <button class="menu-button roadmap" onclick="openModal('modal-roadmap')">
+        <span>🗺️</span>
+        <span>Дорожня карта</span>
+    </button>
 </div>
   
   <script>
@@ -367,94 +387,7 @@ startMiningButton.addEventListener("click", () => {
     }, miningDuration);
 });
     
-   const wheel = document.querySelector('.picker-wheel');
-const items = document.querySelectorAll('.picker-item');
-const itemWidth = items[0].clientWidth; // Ширина елемента
-let currentIndex = Math.floor(items.length / 2); // Початковий активний елемент (по центру)
-
-// Встановлюємо початкове положення колеса
-updateWheelPosition();
-updateActiveItem(currentIndex);
-
-// Додаємо обробник події для натискання на кнопки
-items.forEach((item, index) => {
-    item.addEventListener('click', () => {
-        currentIndex = index;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        // Додайте тут свою логіку для кнопки
-        alert(`Ви вибрали: ${item.innerText}`);
-    });
-});
-
-// Події для прокручування мишкою
-let isDragging = false;
-let startX = 0;
-
-wheel.addEventListener('mousedown', (event) => {
-    startX = event.clientX;
-    isDragging = true;
-});
-
-window.addEventListener('mouseup', () => {
-    isDragging = false;
-});
-
-window.addEventListener('mousemove', (event) => {
-    if (!isDragging) return;
-    const deltaX = event.clientX - startX;
-
-    if (deltaX > 50) {
-        currentIndex = (currentIndex - 1 + items.length) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startX = event.clientX; // Оновлення стартової позиції
-    } else if (deltaX < -50) {
-        currentIndex = (currentIndex + 1) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startX = event.clientX; // Оновлення стартової позиції
-    }
-});
-
-// Додаємо підтримку для мобільних пристроїв
-let startTouchX = 0;
-
-wheel.addEventListener('touchstart', (event) => {
-    startTouchX = event.touches[0].clientX;
-});
-
-wheel.addEventListener('touchmove', (event) => {
-    const touchX = event.touches[0].clientX;
-    const deltaX = touchX - startTouchX;
-
-    if (deltaX > 50) {
-        currentIndex = (currentIndex - 1 + items.length) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startTouchX = touchX; // Оновлення стартової позиції
-    } else if (deltaX < -50) {
-        currentIndex = (currentIndex + 1) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startTouchX = touchX; // Оновлення стартової позиції
-    }
-});
-
-// Функція для оновлення позиції колеса
-function updateWheelPosition() {
-    wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
-}
-
-// Функція для оновлення активного елемента
-function updateActiveItem(index) {
-    items.forEach((item, i) => {
-        item.classList.remove('active');
-        if (i === index) {
-            item.classList.add('active');
-        }
-    });
-}
+   
     
     </script>
 </body>
