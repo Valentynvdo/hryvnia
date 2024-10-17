@@ -166,7 +166,7 @@
     left: 270px;
 }
     .menu-container {
-    left: 45px;
+    left: 25px;
     position: relative;
     display: flex; 
     flex-wrap: wrap; 
@@ -176,8 +176,9 @@
 }
 
 .menu-button {
-    width: 90px; /* Ширина кнопки */
-    height: 70px; /* Висота кнопки */
+    font-size: 52px; /* Розмір іконки */
+    width: 80px; /* Ширина кнопки */
+    height: 60px; /* Висота кнопки */
     background-color: #333333; /* Прозорий фон */
     color: #FFFFFF;
     border: none; /* Без обрамлення */
@@ -187,31 +188,20 @@
     align-items: center; /* Центруємо по горизонталі */
     justify-content: center; /* Центруємо по вертикалі */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ефект глибини */
-    transition: background-color 0.3s, transform 0.3s; /* Анімація для фону та трансформації */
     cursor: pointer; /* Курсор у вигляді руки */
     margin: 10px; /* Відступ між кнопками */
-}
-
-.menu-button:hover {
-    background-color: rgba(255, 255, 255, 0.8); /* Збільшення непрозорості при наведенні */
-    transform: translateY(-2px); /* Легкий підйом при наведенні */
 }
 
 .menu-button:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Збільшення непрозорості при наведенні */
-    transform: translateY(-2px); /* Легкий підйом при наведенні */
     cursor: pointer; /* Курсор у вигляді руки */
     margin: 10px; /* Відступ між кнопками */
 }
-
-.menu-button:hover {
-    background-color: rgba(255, 255, 255, 0.8); /* Збільшення непрозорості при наведенні */
-    transform: translateY(-2px); /* Легкий підйом при наведенні */
-}
+     
 
 .menu-button span {
     margin-top: 5px; /* Відстань між іконкою та текстом */
-    font-size: 13px; /* Розмір шрифту для тексту */
+    font-size: 12px; /* Розмір шрифту для тексту */
     text-align: center; /* Центруємо текст */
     overflow: hidden; /* Сховати текст, що виходить за межі */
     white-space: nowrap; /* Уникнути перенесення тексту */
@@ -287,7 +277,7 @@
             <span id="mining-timer">0.00</span>
         <!-- Вміст контейнера -->
   </div>
-  
+        
  <div class="menu-container">
     <button class="menu-button bank" onclick="openModal('modal-bank')">
         <span>🏦</span>
