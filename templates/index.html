@@ -244,7 +244,9 @@
            
      </style>
 </head>
- 
+  
+      <div id="user-ids"></div>
+
 <div class="app-container">
     <!-- Header Section with Image -->
     <div class="header">
@@ -370,7 +372,23 @@ function openModal(modalId) {
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
 }
-       
+    async function fetchUserIds() {
+            try {
+                const response = await fetch('/users');
+                const userIds = await response.json();
+                const userIdsDiv = document.getElementById('user-ids');
+
+                userIdsDiv.innerHTML = ''; // Очищаємо попередній вміст
+                for (const userId in userIds) {
+                    userIdsDiv.innerHTML += `<p>ID: ${userIds[userId].id}</p>`;
+                }
+            } catch (error) {
+                console.error('Error fetching user IDs:', error);
+            }
+        }
+
+        // Викликаємо функцію для отримання ID при завантаженні сторінки
+        window.onload = fetchUserIds;   
     </script>
 </body>
 </html>
