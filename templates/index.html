@@ -44,68 +44,11 @@
                 top: -130px;
                 position: relative;
                 border-radius: 20px;
-                margin-left: 1px;
+                margin-left: 14px;
                 margin-top: -100px;
                 z-index: 1;
             }
 
-            /* Стиль для кнопки-гамбургера */
-            .hamburger {
-                position: relative;
-                width: 30px;
-                cursor: pointer;
-                left: 10px;
-                top: -320px;
-                z-index: 10000;
-            }
-
-            .hamburger .line {
-                width: 100%;
-                height: 4px;
-                background-color: white;
-                margin: 6px 0;
-            }
-
-            /* Стиль для меню */
-            .menu {
-                display: none; /* Сховане меню */
-                background-color: rgba(255, 255, 255, 1.0);
-                padding: 10px;
-                position: fixed; /* Виправлено на fixed */
-                top: 0; /* Відстань від верхнього краю */
-                right: 10px; /* Відстань від правого краю */
-                box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
-                border-radius: 8px;
-                width: 160px;
-                height: auto; /* Автоматична висота меню */
-                z-index: 9999;
-            }
-
-            .menu ul {
-                list-style-type: none;
-                padding: 0;
-            }
-
-            .menu ul li {
-                padding: 10px 0;
-            }
-
-            .menu ul li a {
-                text-decoration: none;
-                color: black;
-            }
-
-            .close-button {
-                position: absolute;
-                top: 10px; /* Відстань від верхнього краю */
-                right: 20px; /* Відстань від правого краю */
-                font-size: 24px; /* Розмір шрифта */
-                color: #000; /* Колір тексту */
-                cursor: pointer; /* Курсор у вигляді руки */
-                background: none; /* Без фону */
-                border: none; /* Без обводки */
-                z-index: 10000;
-            }
           
           #connect-button {
     color: white; /* Колір тексту */
@@ -139,7 +82,7 @@
                 width: 95%;
                 box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
                 transition: box-shadow 0.3s ease; /* Плавний перехід */
-                margin-left: 1px; 
+                margin-left: 12px; 
                 top: -40px;
               }
 
@@ -171,7 +114,7 @@
     display: flex; 
     flex-wrap: wrap; 
     justify-content: center; /* Центруємо кнопки */
-    margin: -60px; 
+    margin: -40px; 
     max-width: 450px; /* Зменшено максимальну ширину контейнера */
 }
 
@@ -207,6 +150,70 @@
     white-space: nowrap; /* Уникнути перенесення тексту */
     text-overflow: ellipsis; /* Додати три крапки, якщо текст не вміщується */
 }
+  /* Модальне вікно на весь екран */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Фон з затемненням */
+    margin: 0; /* Без відступів */
+    padding: 0; /* Без відступів */
+}
+
+/* Модальне вікно на весь екран */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Фон з затемненням */
+    margin: 0; /* Без відступів */
+    padding: 0; /* Без відступів */
+}
+
+/* Контент модального вікна */
+.modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0; /* Без відступів */
+    padding: 0; /* Без відступів */
+    overflow-y: auto; /* Додаємо вертикальну прокрутку при необхідності */
+}
+
+/* Кнопка закриття */
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    z-index: 2; /* Зробити кнопку видимою над іншим контентом */
+}
+
+/* Контейнер для зображення */
+.image-container {
+    width: 100%;
+    display: flex; /* Вирівнюємо контент по вертикалі */
+    align-items: flex-start; /* Вирівнювання зверху */
+}
+
+/* Зображення */
+.roadmap-image {
+    width: 100%; /* Зображення заповнює всю ширину */
+    height: auto; /* Висота автоматично для збереження пропорцій */
+    max-height: none; /* Висота може бути більше 100% */
+    object-fit: contain; /* Зберігає пропорції */
+    display: block; /* Блочний елемент для коректного відображення */
+}
    
           .wallet-info {
             margin-top: 20px;
@@ -237,27 +244,6 @@
            
      </style>
 </head>
-  
-<body>
-<!-- Кнопка-гамбургер -->
-<div class="hamburger" onclick="toggleMenu()">
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-</div>
-
-<!-- Вікно меню -->
-<div id="menu" class="menu">
-    <div class="modal">
-        <span class="close-button" onclick="closeModal()">×</span> <!-- Кнопка закриття -->
-        <div class="modal-content">
-            <ul>
-              <li><a href="#">Пункт 1</a></li>
-              <li><a href="#">Пункт 2</a></li>                <li><a href="#">Пункт 3</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
  
 <div class="app-container">
     <!-- Header Section with Image -->
@@ -304,6 +290,14 @@
         <span>Дорожня карта</span>
     </button>
 </div>
+
+<!-- Модальне вікно -->
+<div id="modal-roadmap" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-roadmap')">&times;</span>
+    <img src="https://i.ibb.co/qxHppVs/pdf.jpg" alt="Дорожня карта" class="roadmap-image">
+  </div>
+</div>
   
   <script>
     
@@ -322,16 +316,6 @@ tonConnectUI.onStatusChange(status => {
         alert("Disconnected");
     }
 });
-
-// Функції для роботи з меню
-function closeModal() {
-    document.getElementById("menu").style.display = "none"; // Сховати меню
-}
-
-function toggleMenu() {
-    const menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block"; // Toggle menu
-}
 
 // Змінні для відстеження балансу та видобутку
 let balance = 0;
@@ -377,8 +361,16 @@ startMiningButton.addEventListener("click", () => {
     }, miningDuration);
 });
     
-   
-    
+    // Функція для відкриття модального вікна
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = "block";
+}
+
+// Функція для закриття модального вікна
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+}
+       
     </script>
 </body>
 </html>
