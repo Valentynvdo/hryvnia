@@ -1,7 +1,7 @@
-import uuid
 from flask import Flask, request, jsonify, render_template
 import psycopg2
 import os
+import uuid
 
 app = Flask(__name__)
 
