@@ -1,45 +1,37 @@
 const express = require('express');
 const { Pool } = require('pg');
-const cors = require('cors'); // Додайте цю бібліотеку для підтримки CORS
+const cors = require('cors');
 
 const app = express();
-app.use(cors()); // Дозволяє запити з інших доменів
+app.use(cors());
 app.use(express.json());
 
-// Налаштування підключення до бази даних
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL || 'postgresql://balans_user:yAlZcxX1tpmZRcVhDyzsOuklsrJCv7Le@dpg-csagdrqj1k6c73cp8hlg-a/balans',
+    connectionString: 'postgresql://balans_user:yAlZcxX1tpmZRcVhDyzsOuklsrJCv7Le@dpg-csagdrqj1k6c73cp8hlg-a/balans',
     ssl: {
         rejectUnauthorized: false // Необхідно для Render
     }
 });
 
-// Функція для створення таблиці, якщо її ще не існує
-const createUsersTable = async () => {
-    try {
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS users (
-                address VARCHAR(255) PRIMARY KEY,
-                balance DECIMAL(10, 2) NOT NULL DEFAULT 0
-            )
-        `);
-        console.log('Table created or already exists');
-    } catch (err) {
-        console.error('Error creating table:', err);
-    }
-};
-
-// Викликаємо функцію створення таблиці
-createUsersTable();
+// Створення таблиці, якщо її ще не існує
+pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+        address VARCHAR(255) PRIMARY KEY,
+        balance DECIMAL(10, 2) NOT NULL DEFAULT 0
+    )
+`)
+.then(res => {
+    console.log('Table created or already exists');
+})
+.catch(err => {
+    console.error('Error creating table:', err);
+});
 
 // API для збереження балансу
 app.post('/update-balance', async (req, res) => {
     const { address, balance } = req.body;
     try {
-        await pool.query(
-            'INSERT INTO users (address, balance) VALUES ($1, $2) ON CONFLICT (address) DO UPDATE SET balance = $2',
-            [address, balance]
-        );
+        await pool.query('INSERT INTO users (address, balance) VALUES ($1, $2) ON CONFLICT (address) DO UPDATE SET balance = $2', [address, balance]);
         res.sendStatus(200);
     } catch (error) {
         console.error(error);
