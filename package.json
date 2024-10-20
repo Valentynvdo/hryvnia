@@ -18,3 +18,9 @@
     "eject": "react-scripts eject"
   }
 }
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.6.0" // Для роботи з PostgreSQL
+  }
+}
