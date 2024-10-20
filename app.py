@@ -1,113 +1,88 @@
-// Ініціалізація TonConnectUI
-const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
-    buttonRootId: 'connect-button'
-});
+import uuid
+from flask import Flask, request, jsonify
+import psycopg2
+from psycopg2 import sql
+import os
 
-// Змінні для відстеження статусу підключення та балансу
-let connectedUserAddress = null; // Зберігаємо адресу підключеного користувача
-let balance = 0;
-const miningDuration = 8000; // 8 секунд
-const miningPoints = 19; // Кількість поінтів за майнінг
+app = Flask(__name__)
 
-// Знайти елементи на сторінці
-const balanceDisplay = document.getElementById("coin-balance");
-const startMiningButton = document.getElementById("start-mining-btn");
-const miningTimerDisplay = document.getElementById("mining-timer");
+# Налаштування підключення до бази даних
+DB_HOST = "dpg-csagdrqj1k6c73cp8hlg-a.oregon-postgres.render.com"
+DB_NAME = "balans"
+DB_USER = "balans_user"
+DB_PASSWORD = "yAlZcxX1tpmZRcVhDyzsOuklsrJCv7Le"
+DB_PORT = "5432"
 
-// Відслідковування статусу підключення
-tonConnectUI.onStatusChange(status => {
-    console.log("TonConnectUI status changed:", status); // Логування статусу
-    if (status.connected) {
-        alert(`Connected: ${status.address}`);
-        connectedUserAddress = status.address; // Зберігаємо адресу користувача
-        console.log("Connected user address set to:", connectedUserAddress); // Логування адреси
-        loadBalance(connectedUserAddress); // Завантажуємо баланс при підключенні
-    } else {
-        alert("Disconnected");
-        connectedUserAddress = null; // Обнуляємо адресу при відключенні
-    }
-});
+# Функція для підключення до бази даних
+def get_db_connection():
+    return psycopg2.connect(
+        host=DB_HOST,
+        database=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        port=DB_PORT
+    )
 
-// Додавання обробника для кнопки початку майнінгу
-startMiningButton.addEventListener("click", () => {
-    console.log("Start Mining button clicked"); // Лог для перевірки натискання кнопки
+# Функція для отримання або створення нового користувача
+def get_or_create_user():
+    user_id = str(uuid.uuid4())  # Генеруємо унікальний ID
+    initial_balance = 100  # Встановіть початковий баланс
 
-    if (!connectedUserAddress) {
-        alert("Please connect your wallet first.");
-        console.log("No wallet connected. Mining cannot start.");
-        return;
-    }
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                # Перевірка, чи існує користувач з цим ID
+                cursor.execute("SELECT * FROM users WHERE id = %s;", (user_id,))
+                user = cursor.fetchone()
 
-    console.log("Connected wallet address found, starting mining..."); // Лог, що користувач підключений
+                if not user:
+                    # Створити нового користувача
+                    cursor.execute("INSERT INTO users (id, balance) VALUES (%s, %s);", (user_id, initial_balance))
+                    conn.commit()
+                    return user_id, initial_balance
+                else:
+                    # Повертаємо існуючого користувача
+                    return user[0], user[1]  # повертаємо ID та баланс
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None, 0
 
-    startMiningButton.disabled = true; // Вимкнути кнопку
-    startMiningButton.textContent = "Mining in progress ⛏️...";
+@app.route('/initialize', methods=['GET'])
+def initialize_user():
+    user_id, balance = get_or_create_user()
+    return jsonify({'userId': user_id, 'balance': balance})
 
-    let remainingTime = miningDuration; // Залишковий час
-    const interval = 100; // Оновлення таймера кожні 100 мс
+@app.route('/get_balance', methods=['POST'])
+def get_balance_route():
+    user_id = request.json.get('userId')
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT balance FROM users WHERE id = %s;", (user_id,))
+                balance = cursor.fetchone()
+                if balance is not None:
+                    return jsonify({'balance': balance[0]})
+                else:
+                    return jsonify({'balance': 0}), 404
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return jsonify({'error': 'Could not retrieve balance'}), 500
 
-    // Очищення попереднього значення таймера
-    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Відображаємо 8 секунд
+@app.route('/update_balance', methods=['POST'])
+def update_balance_route():
+    data = request.get_json()
+    user_id = data.get('userId')
+    new_balance = data.get('newBalance')
 
-    const timer = setInterval(() => {
-        remainingTime -= interval; // Зменшуємо залишковий час
-        const seconds = (remainingTime / 1000).toFixed(2); // Форматування до двох десяткових
-        miningTimerDisplay.textContent = seconds; // Оновлення таймера
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cursor:
+                cursor.execute("UPDATE users SET balance = %s WHERE id = %s;", (new_balance, user_id))
+                conn.commit()
+        return jsonify({'status': 'success'})
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return jsonify({'error': 'Could not update balance'}), 500
 
-        // Якщо час вичерпано, зупиняємо таймер
-        if (remainingTime <= 0) {
-            clearInterval(timer);
-            remainingTime = 0; // Гарантуємо, що залишковий час не буде меншим за 0
-            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Оновлюємо таймер до 0
-        }
-    }, interval);
-
-    setTimeout(() => {
-        clearInterval(timer); // Зупинити таймер
-        balance += miningPoints; // Додаємо монети до балансу
-        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
-
-        // Зберегти новий баланс на сервері
-        saveBalance(connectedUserAddress, balance);
-
-        startMiningButton.disabled = false; // Увімкнути кнопку
-        startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
-    }, miningDuration);
-});
-
-// Функція для збереження балансу на сервері
-async function saveBalance(userId, newBalance) {
-    try {
-        const response = await fetch('/update_balance', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId, newBalance })
-        });
-        if (!response.ok) {
-            throw new Error('Failed to save balance');
-        }
-        console.log(`Saved balance for ${userId}: ${newBalance}`);
-    } catch (error) {
-        console.error('Error saving balance:', error);
-    }
-}
-
-// Функція для завантаження балансу з сервера
-async function loadBalance(userId) {
-    try {
-        const response = await fetch(`/get_balance?userId=${userId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        balance = data.balance; // Зберегти баланс
-        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
-    } catch (error) {
-        console.error('Error loading balance:', error);
-    }
-}
+if __name__ == '__main__':
+    app.run(debug=True)
