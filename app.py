@@ -23,12 +23,12 @@ def get_db_connection():
 
 @app.route('/')
 def index():
-    balance = get_balance()
+    balance = get_balance()  # Отримати баланс
     return render_template('index.html', balance=balance)
 
 @app.route('/start_mining', methods=['POST'])
 def start_mining():
-    update_balance(19)  # Додаємо 19 поінтів до балансу
+    increment_balance(19)  # Додаємо 19 поінтів до балансу
     return redirect(url_for('index'))
 
 def get_balance():
@@ -40,13 +40,39 @@ def get_balance():
     conn.close()
     return balance
 
-def update_balance(amount):
+def increment_balance(amount):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE users SET balance = balance + %s WHERE id = 1;", (amount,))
     conn.commit()
     cursor.close()
     conn.close()
+
+@app.route('/update_balance', methods=['POST'])
+def update_balance_route():
+    data = request.get_json()
+    user_id = data.get('userId')  # Ви повинні передати ID користувача
+    new_balance = data.get('newBalance')
+    # Тепер вам потрібно змінити логіку для оновлення балансу конкретного користувача
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE users SET balance = %s WHERE id = %s;", (new_balance, user_id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return {'status': 'success'}
+
+@app.route('/get_balance', methods=['GET'])
+def get_balance_route():
+    user_id = request.args.get('userId')  # Отримати ID користувача
+    # Для отримання балансу конкретного користувача
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT balance FROM users WHERE id = %s;", (user_id,))
+    balance = cursor.fetchone()[0]  # Отримуємо баланс
+    cursor.close()
+    conn.close()
+    return {'balance': balance}
 
 if __name__ == '__main__':
     app.run(debug=True)
