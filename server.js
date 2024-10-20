@@ -8,17 +8,38 @@ app.use(express.json());
 
 // Налаштування підключення до бази даних
 const pool = new Pool({
-    connectionString: process.env.DATABASE_URL, // Додайте URL бази даних
+    connectionString: process.env.DATABASE_URL || 'postgresql://balans_user:yAlZcxX1tpmZRcVhDyzsOuklsrJCv7Le@dpg-csagdrqj1k6c73cp8hlg-a/balans',
     ssl: {
         rejectUnauthorized: false // Необхідно для Render
     }
 });
 
+// Функція для створення таблиці, якщо її ще не існує
+const createUsersTable = async () => {
+    try {
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS users (
+                address VARCHAR(255) PRIMARY KEY,
+                balance DECIMAL(10, 2) NOT NULL DEFAULT 0
+            )
+        `);
+        console.log('Table created or already exists');
+    } catch (err) {
+        console.error('Error creating table:', err);
+    }
+};
+
+// Викликаємо функцію створення таблиці
+createUsersTable();
+
 // API для збереження балансу
 app.post('/update-balance', async (req, res) => {
     const { address, balance } = req.body;
     try {
-        await pool.query('INSERT INTO users (address, balance) VALUES ($1, $2) ON CONFLICT (address) DO UPDATE SET balance = $2', [address, balance]);
+        await pool.query(
+            'INSERT INTO users (address, balance) VALUES ($1, $2) ON CONFLICT (address) DO UPDATE SET balance = $2',
+            [address, balance]
+        );
         res.sendStatus(200);
     } catch (error) {
         console.error(error);
