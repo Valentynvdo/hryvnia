@@ -217,6 +217,17 @@
     object-fit: contain; /* Зберігає пропорції */
     display: block; /* Блочний елемент для коректного відображення */
 }
+    .user-id-container {
+    position: absolute; /* Встановлюємо абсолютне позиціонування */
+    top: 10px; /* Відстань від верхньої частини контейнера */
+    right: 10px; /* Відстань від правої частини контейнера */
+    background-color: rgba(255, 255, 255, 0.8); /* Напівпрозорий фон для контрасту */
+    padding: 5px 10px; /* Внутрішні відступи */
+    border-radius: 5px; /* Закруглені краї */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Тінь для об'єму */
+    z-index: 1000; /* Високий z-index, щоб елемент не був перекритий */
+    font-weight: bold; /* Виділення тексту */
+}
    
           .wallet-info {
             margin-top: 20px;
@@ -247,6 +258,11 @@
            
      </style>
 </head>
+  
+  <div style="position: relative;"> <!-- Контейнер з відносним позиціонуванням -->
+    <div class="user-id-container">
+        <span id="user-id" style="cursor: pointer;">ID: user-xxxxxxx</span>
+    </div>
 
 <div class="app-container">
     <!-- Header Section with Image -->
@@ -310,30 +326,47 @@ const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
     buttonRootId: 'connect-button'
 });
 
-// Відслідковування статусу підключення
-tonConnectUI.onStatusChange(status => {
-    console.log(status); // Логування статусу
-    if (status.connected) {
-        alert(`Connected: ${status.address}`);
-        loadBalance(status.address); // Завантажити баланс при підключенні
-    } else {
-        alert("Disconnected");
-    }
-});
-
-// Змінні для відстеження балансу та видобутку
+// Змінні для відстеження статусу підключення та балансу
+let connectedUserId = generateUserId(); // Генерація унікального ID
 let balance = 0;
 const miningDuration = 8000; // 8 секунд
-const miningPoints = 19;
+const miningPoints = 19; // Кількість поінтів за майнінг
 
 // Знайти елементи на сторінці
 const balanceDisplay = document.getElementById("coin-balance");
 const startMiningButton = document.getElementById("start-mining-btn");
 const miningTimerDisplay = document.getElementById("mining-timer");
+const userIdDisplay = document.getElementById("user-id"); // Відображення ID користувача
 
-// Додавання обробника для кнопки початку видобутку
+// Відображаємо ID користувача на сторінці
+userIdDisplay.textContent = `User ID: ${connectedUserId}`;
+
+// Додаємо обробник для копіювання ID при натисканні на нього
+userIdDisplay.addEventListener("click", () => {
+    navigator.clipboard.writeText(connectedUserId)
+        .then(() => {
+            alert("User ID copied to clipboard!");
+        })
+        .catch(err => {
+            console.error("Failed to copy: ", err);
+        });
+});
+
+// Відслідковування статусу підключення
+tonConnectUI.onStatusChange(status => {
+    console.log("TonConnectUI status changed:", status); // Логування статусу
+    if (status.connected) {
+        alert(`Connected: ${status.address}`);
+        loadBalance(connectedUserId); // Завантажуємо баланс при підключенні
+    } else {
+        alert("Disconnected");
+    }
+});
+
+// Додавання обробника для кнопки початку майнінгу
 startMiningButton.addEventListener("click", () => {
     console.log("Start Mining button clicked"); // Лог для перевірки натискання кнопки
+
     startMiningButton.disabled = true; // Вимкнути кнопку
     startMiningButton.textContent = "Mining in progress ⛏️...";
 
@@ -358,16 +391,21 @@ startMiningButton.addEventListener("click", () => {
 
     setTimeout(() => {
         clearInterval(timer); // Зупинити таймер
-        balance += miningPoints; // Додати монети до балансу
+        balance += miningPoints; // Додаємо монети до балансу
         balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
 
         // Зберегти новий баланс на сервері
-        saveBalance(status.address, balance);
+        saveBalance(connectedUserId, balance);
 
         startMiningButton.disabled = false; // Увімкнути кнопку
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
+
+// Функція для генерації унікального ID
+function generateUserId() {
+    return 'user-' + Math.random().toString(36).substr(2, 9); // Генерує ID у форматі user-xxxxxxxxx
+}
 
 // Функція для збереження балансу на сервері
 async function saveBalance(userId, newBalance) {
@@ -391,21 +429,20 @@ async function saveBalance(userId, newBalance) {
 // Функція для завантаження балансу з сервера
 async function loadBalance(userId) {
     try {
-        const response = await fetch('/get_balance', {
+        const response = await fetch(`/get_balance?userId=${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         });
         const data = await response.json();
-        balance = data.balance; // Зберегти баланс
+        balance = data.balance || 0; // Зберегти баланс (встановлюємо в 0, якщо даних немає)
         balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
     } catch (error) {
         console.error('Error loading balance:', error);
     }
 }
-
-// Функція для відкриття модального вікна
+    // Функція для відкриття модального вікна
 function openModal(modalId) {
     document.getElementById(modalId).style.display = "block";
 }
