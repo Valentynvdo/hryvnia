@@ -340,7 +340,6 @@ const userIdDisplay = document.getElementById("user-id"); // Відображе�
 
 // Відслідковування статусу підключення
 tonConnectUI.onStatusChange(status => {
-    console.log("TonConnectUI status changed:", status);
     if (status.connected) {
         alert(`Connected: ${status.address}`);
         initializeUser(status.address); // Ініціалізація користувача при підключенні
@@ -376,8 +375,6 @@ async function initializeUser(address) {
 
 // Додавання обробника для кнопки початку майнінгу
 startMiningButton.addEventListener("click", () => {
-    console.log("Start Mining button clicked");
-
     startMiningButton.disabled = true;
     startMiningButton.textContent = "Mining in progress ⛏️...";
 
@@ -430,16 +427,34 @@ async function saveBalance(userId, newBalance) {
     }
 }
 
-// Функція для відкриття модального вікна
-function openModal(modalId) {
-    document.getElementById(modalId).style.display = "block";
+// Функція для копіювання ID користувача
+function copyUserId() {
+    const userIdElement = document.getElementById("user-id");
+    const range = document.createRange();
+    range.selectNode(userIdElement);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+
+    try {
+        document.execCommand("copy");
+        alert("ID скопійовано: " + userIdElement.textContent);
+    } catch (err) {
+        console.error("Не вдалося скопіювати ID", err);
+    }
+    
+    window.getSelection().removeAllRanges();
 }
+
+// Функція для відкриття модального вікна
+function openModal (modalId) {
+document.getElementById(modalId) .style.display = "block";
+ }
 
 // Функція для закриття модального вікна
 function closeModal(modalId) {
-    document.getElementById(modalId).style.display = "none";
-}
- 
+document.getElementById(modalId) .style.display = "none";
+ }
+
     </script>
 </body>
 </html>
