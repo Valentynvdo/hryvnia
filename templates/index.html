@@ -4,6 +4,9 @@
   <title>Підключення гаманця TON</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wallet App</title>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database.js"></script>
   <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <link rel="stylesheet" href="styles.css">
   <style>
@@ -301,7 +304,7 @@
   
   <script>
     
-   // Ініціалізація TonConnectUI
+// Ініціалізація TonConnectUI
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
     manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
     buttonRootId: 'connect-button'
@@ -316,7 +319,7 @@ tonConnectUI.onStatusChange(status => {
         alert("Disconnected");
     }
 });
-
+       
 // Змінні для відстеження балансу та видобутку
 let balance = 0;
 const miningDuration = 8000; // 8 секунд
@@ -326,10 +329,10 @@ const miningPoints = 19;
 const balanceDisplay = document.getElementById("coin-balance");
 const startMiningButton = document.getElementById("start-mining-btn");
 const miningTimerDisplay = document.getElementById("mining-timer");
-const transferTableBody = document.querySelector("#transfer-table tbody");
 
 // Додавання обробника для кнопки початку видобутку
 startMiningButton.addEventListener("click", () => {
+    console.log("Start Mining button clicked"); // Лог для перевірки натискання кнопки
     startMiningButton.disabled = true; // Вимкнути кнопку
     startMiningButton.textContent = "Mining in progress ⛏️...";
 
@@ -356,12 +359,32 @@ startMiningButton.addEventListener("click", () => {
         clearInterval(timer); // Зупинити таймер
         balance += miningPoints; // Додати монети до балансу
         balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
+
+        // Зберегти новий баланс у Firebase
+        saveBalance(status.address, balance);
+
         startMiningButton.disabled = false; // Увімкнути кнопку
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
-    
-    // Функція для відкриття модального вікна
+
+// Функція для збереження балансу в Firebase
+async function saveBalance(userId, newBalance) {
+    // Тут ви реалізуєте код для збереження нового балансу в Firebase
+    console.log(`Saving balance for ${userId}: ${newBalance}`);
+    // Ваш код збереження у Firebase
+}
+
+// Функція для завантаження балансу з Firebase
+async function loadBalance(userId) {
+    // Тут ви реалізуєте код для завантаження балансу з Firebase
+    // Після отримання балансу оновіть змінну balance та balanceDisplay
+    const balanceFromFirebase = 100; // Приклад значення
+    balance = balanceFromFirebase; // Зберегти баланс
+    balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
+}
+
+// Функція для відкриття модального вікна
 function openModal(modalId) {
     document.getElementById(modalId).style.display = "block";
 }
@@ -370,18 +393,6 @@ function openModal(modalId) {
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = "none";
 }
-
-    (async () => {
-  const userId = 'exampleUserId'; // Замініть на реальний userId
-
-  // Збереження початкового балансу
-  await saveBalance(userId, 100);
-
-  // Отримання та виведення балансу
-  const balance = await getBalance(userId);
-  console.log("User balance: ", balance);
-})();
-
     </script>
 </body>
 </html>
