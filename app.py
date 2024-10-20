@@ -35,6 +35,8 @@ def get_or_create_user(user_id=None):
                     user = cursor.fetchone()
                     if user:
                         return user[0], user[1]  # повертаємо ID та баланс
+                    else:
+                        return None, 0  # Користувач не знайдений
                 else:
                     user_id = str(uuid.uuid4())  # Генеруємо унікальний ID, якщо ID не надано
 
