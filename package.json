@@ -1,7 +1,13 @@
 {
-  "name": "your-app-name",
-  "version": "0.1.0",
+  "name": "wallet-app",
+  "version": "1.0.0",
   "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
     "@tonconnect/sdk": "^3.0.5",
     "@tonconnect/ui-react": "^2.0.9",
@@ -9,26 +15,13 @@
     "mongodb": "^6.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^3.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  }
-}
-{
-  "name": "wallet-app",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
+    "react-scripts": "^3.0.1",
     "express": "^4.17.1",
     "pg": "^8.6.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0"
+  },
+  "engines": {
+    "node": "14.x"  // або інша версія, яку ви використовуєте
   }
 }
