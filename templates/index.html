@@ -322,12 +322,12 @@
     
 // Ініціалізація TonConnectUI
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
-    buttonRootId: 'connect-button'
+    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
+    buttonRootId: 'connect-button'
 });
 
 // Змінні для відстеження статусу підключення та балансу
-let connectedUserId = generateUserId(); // Генерація унікального ID
+let connectedUserId = ''; // Змінна для зберігання ID
 let balance = 0;
 const miningDuration = 8000; // 8 секунд
 const miningPoints = 19; // Кількість поінтів за майнінг
@@ -338,119 +338,103 @@ const startMiningButton = document.getElementById("start-mining-btn");
 const miningTimerDisplay = document.getElementById("mining-timer");
 const userIdDisplay = document.getElementById("user-id"); // Відображення ID користувача
 
-// Відображаємо ID користувача на сторінці
-userIdDisplay.textContent = `User ID: ${connectedUserId}`;
-
-// Додаємо обробник для копіювання ID при натисканні на нього
-userIdDisplay.addEventListener("click", () => {
-    navigator.clipboard.writeText(connectedUserId)
-        .then(() => {
-            alert("User ID copied to clipboard!");
-        })
-        .catch(err => {
-            console.error("Failed to copy: ", err);
-        });
-});
-
 // Відслідковування статусу підключення
 tonConnectUI.onStatusChange(status => {
-    console.log("TonConnectUI status changed:", status); // Логування статусу
-    if (status.connected) {
-        alert(`Connected: ${status.address}`);
-        loadBalance(connectedUserId); // Завантажуємо баланс при підключенні
-    } else {
-        alert("Disconnected");
-    }
+    console.log("TonConnectUI status changed:", status);
+    if (status.connected) {
+        alert(`Connected: ${status.address}`);
+        // Завантажити або ініціалізувати користувача при підключенні
+        initializeUser(status.address); // Змінено для отримання ID з сервера
+    } else {
+        alert("Disconnected");
+    }
 });
+
+// Функція для ініціалізації користувача
+async function initializeUser(address) {
+    try {
+        const response = await fetch(`/initialize?userId=${connectedUserId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        connectedUserId = data.userId; // Зберігаємо отриманий ID
+        balance = data.balance || 0; // Зберігаємо баланс
+        balanceDisplay.textContent = balance.toFixed(2); // Оновлюємо відображення балансу
+        userIdDisplay.textContent = `User ID: ${connectedUserId}`; // Відображаємо ID користувача
+    } catch (error) {
+        console.error('Error initializing user:', error);
+    }
+}
 
 // Додавання обробника для кнопки початку майнінгу
 startMiningButton.addEventListener("click", () => {
-    console.log("Start Mining button clicked"); // Лог для перевірки натискання кнопки
+    console.log("Start Mining button clicked");
 
-    startMiningButton.disabled = true; // Вимкнути кнопку
-    startMiningButton.textContent = "Mining in progress ⛏️...";
+    startMiningButton.disabled = true;
+    startMiningButton.textContent = "Mining in progress ⛏️...";
 
-    let remainingTime = miningDuration; // Залишковий час
-    const interval = 100; // Оновлення таймера кожні 100 мс
+    let remainingTime = miningDuration;
+    const interval = 100;
 
-    // Очищення попереднього значення таймера
-    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Відображаємо 8 секунд
+    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
 
-    const timer = setInterval(() => {
-        remainingTime -= interval; // Зменшуємо залишковий час
-        const seconds = (remainingTime / 1000).toFixed(2); // Форматування до двох десяткових
-        miningTimerDisplay.textContent = seconds; // Оновлення таймера
+    const timer = setInterval(() => {
+        remainingTime -= interval;
+        const seconds = (remainingTime / 1000).toFixed(2);
+        miningTimerDisplay.textContent = seconds;
 
-        // Якщо час вичерпано, зупиняємо таймер
-        if (remainingTime <= 0) {
-            clearInterval(timer);
-            remainingTime = 0; // Гарантуємо, що залишковий час не буде меншим за 0
-            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2); // Оновлюємо таймер до 0
-        }
-    }, interval);
+        if (remainingTime <= 0) {
+            clearInterval(timer);
+            remainingTime = 0;
+            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
+        }
+    }, interval);
 
-    setTimeout(() => {
-        clearInterval(timer); // Зупинити таймер
-        balance += miningPoints; // Додаємо монети до балансу
-        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
+    setTimeout(() => {
+        clearInterval(timer);
+        balance += miningPoints;
+        balanceDisplay.textContent = balance.toFixed(2);
 
-        // Зберегти новий баланс на сервері
-        saveBalance(connectedUserId, balance);
+        // Зберегти новий баланс на сервері
+        saveBalance(connectedUserId, balance);
 
-        startMiningButton.disabled = false; // Увімкнути кнопку
-        startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
-    }, miningDuration);
+        startMiningButton.disabled = false;
+        startMiningButton.textContent = "Start Mining";
+    }, miningDuration);
 });
-
-// Функція для генерації унікального ID
-function generateUserId() {
-    return 'user-' + Math.random().toString(36).substr(2, 9); // Генерує ID у форматі user-xxxxxxxxx
-}
 
 // Функція для збереження балансу на сервері
 async function saveBalance(userId, newBalance) {
-    try {
-        const response = await fetch('/update_balance', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId, newBalance })
-        });
-        if (!response.ok) {
-            throw new Error('Failed to save balance');
-        }
-        console.log(`Saved balance for ${userId}: ${newBalance}`);
-    } catch (error) {
-        console.error('Error saving balance:', error);
-    }
+    try {
+        const response = await fetch('/update_balance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, newBalance })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save balance');
+        }
+        console.log(`Saved balance for ${userId}: ${newBalance}`);
+    } catch (error) {
+        console.error('Error saving balance:', error);
+    }
 }
 
-// Функція для завантаження балансу з сервера
-async function loadBalance(userId) {
-    try {
-        const response = await fetch(`/get_balance?userId=${userId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-        balance = data.balance || 0; // Зберегти баланс (встановлюємо в 0, якщо даних немає)
-        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
-    } catch (error) {
-        console.error('Error loading balance:', error);
-    }
-}
-    // Функція для відкриття модального вікна
+// Функція для відкриття модального вікна
 function openModal(modalId) {
-    document.getElementById(modalId).style.display = "block";
+    document.getElementById(modalId).style.display = "block";
 }
 
 // Функція для закриття модального вікна
 function closeModal(modalId) {
-    document.getElementById(modalId).style.display = "none";
+    document.getElementById(modalId).style.display = "none";
 }
+    
     </script>
 </body>
 </html>
