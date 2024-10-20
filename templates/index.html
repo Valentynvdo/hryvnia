@@ -315,11 +315,12 @@ tonConnectUI.onStatusChange(status => {
     console.log(status); // Логування статусу
     if (status.connected) {
         alert(`Connected: ${status.address}`);
+        loadBalance(status.address); // Завантажити баланс при підключенні
     } else {
         alert("Disconnected");
     }
 });
-       
+
 // Змінні для відстеження балансу та видобутку
 let balance = 0;
 const miningDuration = 8000; // 8 секунд
@@ -360,7 +361,7 @@ startMiningButton.addEventListener("click", () => {
         balance += miningPoints; // Додати монети до балансу
         balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
 
-        // Зберегти новий баланс у Firebase
+        // Зберегти новий баланс на сервері
         saveBalance(status.address, balance);
 
         startMiningButton.disabled = false; // Увімкнути кнопку
@@ -368,20 +369,40 @@ startMiningButton.addEventListener("click", () => {
     }, miningDuration);
 });
 
-// Функція для збереження балансу в Firebase
+// Функція для збереження балансу на сервері
 async function saveBalance(userId, newBalance) {
-    // Тут ви реалізуєте код для збереження нового балансу в Firebase
-    console.log(`Saving balance for ${userId}: ${newBalance}`);
-    // Ваш код збереження у Firebase
+    try {
+        const response = await fetch('/update_balance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, newBalance })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save balance');
+        }
+        console.log(`Saved balance for ${userId}: ${newBalance}`);
+    } catch (error) {
+        console.error('Error saving balance:', error);
+    }
 }
 
-// Функція для завантаження балансу з Firebase
+// Функція для завантаження балансу з сервера
 async function loadBalance(userId) {
-    // Тут ви реалізуєте код для завантаження балансу з Firebase
-    // Після отримання балансу оновіть змінну balance та balanceDisplay
-    const balanceFromFirebase = 100; // Приклад значення
-    balance = balanceFromFirebase; // Зберегти баланс
-    balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
+    try {
+        const response = await fetch('/get_balance', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        balance = data.balance; // Зберегти баланс
+        balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
+    } catch (error) {
+        console.error('Error loading balance:', error);
+    }
 }
 
 // Функція для відкриття модального вікна
