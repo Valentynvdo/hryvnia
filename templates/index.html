@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <title>Підключення гаманця TON</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet App</title>
   <script src="https://unpkg.com/@tonconnect/ui@1.0.0-beta.5/dist/tonconnect-ui.min.js"></script>
     <link rel="stylesheet" href="styles.css">
   <style>
@@ -19,51 +19,18 @@
             overflow: hidden; /* Заборонити вертикальну прокрутку */
         }
 
-        /* Для мобільних пристроїв (до 480px) */
-        @media (max-width: 480px)
-        {
-            .custom-container {
-                left: 150px;
-                position: relative;
-                top: 50px; /* Відступ від верхнього краю */
-                left: 25px; /* Відступ від лівого краю */
-                width: 120px;
-                height: 60px;
-                padding: 1px;
-                border-radius: 10px;
-                box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-                background-color: #A9A9A9;  
-                opacity: 0.5;
-                z-index: 1;
-            }
-
-            .container {
-                left: 150px;
-                position: relative;
-                top: 1px; /* Відстань від верхнього краю */
-                left: 190px; /* Відстань від лівого краю */
-                width: 120px;
-                height: 63px;
-                display: flex;
-                justify-content: flex-start; 
-                background-color: #A9A9A9;
-                box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-                z-index: 1; 
-            }
-
             .header {
                 margin-bottom: -90px;
             }
 
             .header-image {
                 position: relative;
-                width: 65%;
+                width: 85%;
                 height: auto;
                 border-radius: 1px;
                 margin-bottom: 30px;
-                margin-left: 70px;
-                top: -69px;
+                margin-left: 25px;
+                top: -175px;
                 z-index: 1;
             
             }
@@ -74,79 +41,14 @@
                 background-color: rgba(51, 51, 51, 0.3);
                 padding: 30px;
                 overflow: auto;
-                top: -30px;
+                top: -130px;
                 position: relative;
                 border-radius: 20px;
-                margin-left: 12px;
+                margin-left: 14px;
                 margin-top: -100px;
                 z-index: 1;
             }
 
-            .icon {
-                position: relative;
-                font-size: 40px; /* Розмір шрифта для символу */
-                margin: 0 159px; /* Відстань з боків */
-                align-items: center;
-                top: -7px;
-            } 
-
-            /* Стиль для кнопки-гамбургера */
-            .hamburger {
-                position: relative;
-                width: 30px;
-                cursor: pointer;
-                left: 10px;
-                top: -255px;
-                z-index: 10000;
-            }
-
-            .hamburger .line {
-                width: 100%;
-                height: 4px;
-                background-color: white;
-                margin: 6px 0;
-            }
-
-            /* Стиль для меню */
-            .menu {
-                display: none; /* Сховане меню */
-                background-color: rgba(255, 255, 255, 1.0);
-                padding: 10px;
-                position: fixed; /* Виправлено на fixed */
-                top: 0; /* Відстань від верхнього краю */
-                right: 10px; /* Відстань від правого краю */
-                box-shadow: 0px 8px 16px rgba(0,0,0,0.3);
-                border-radius: 8px;
-                width: 160px;
-                height: auto; /* Автоматична висота меню */
-                z-index: 9999;
-            }
-
-            .menu ul {
-                list-style-type: none;
-                padding: 0;
-            }
-
-            .menu ul li {
-                padding: 10px 0;
-            }
-
-            .menu ul li a {
-                text-decoration: none;
-                color: black;
-            }
-
-            .close-button {
-                position: absolute;
-                top: 10px; /* Відстань від верхнього краю */
-                right: 20px; /* Відстань від правого краю */
-                font-size: 24px; /* Розмір шрифта */
-                color: #000; /* Колір тексту */
-                cursor: pointer; /* Курсор у вигляді руки */
-                background: none; /* Без фону */
-                border: none; /* Без обводки */
-                z-index: 10000;
-            }
           
           #connect-button {
     color: white; /* Колір тексту */
@@ -156,8 +58,8 @@
     border-radius: 5px; /* Закруглені краї */
     cursor: grab; /* Курсор для перетягування */
     position: absolute; /* Для можливості переміщення */
-    top: 180px; /* Відстань зверху */
-    left: 100px; /* Відстань зліва */
+    top: 230px; /* Відстань зверху */
+    left: 95px; /* Відстань зліва */
     z-index: 1000; /* Щоб кнопка була поверх інших елементів */
 }
           body {
@@ -167,44 +69,7 @@
     height: 100vh;
     background-color: #f0f0f0;
 }
-
-.picker-container {
-    position: absolute;
-    left: 25px;
-    top: 1px;
-    position: relative;
-    width: 300px; /* Ширина контейнера */
-    height: 100px; /* Висота контейнера */
-    overflow: hidden;
-}
-
-.picker-wheel {
-    display: flex;
-    transition: transform 0.3s ease; /* Плавний перехід */
-}
-
-.picker-item {
-    color: #ffffff;
-    width: 100px; /* Ширина елемента */
-    height: 100px; /* Висота елемента */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 44px; /* Розмір шрифту */
-    opacity: 0.5; /* Непрозорість */
-    transition: transform 0.3s ease, opacity 0.3s ease; /* Плавний перехід */
-    flex-shrink: 0; /* Не зменшувати розмір */
-    cursor: pointer; /* Курсор у вигляді руки */
-}
-
-.picker-item:hover {
-    opacity: 1; /* Збільшення непрозорості при наведенні */
-}
-
-.picker-item.active {
-    transform: scale(1.5); /* Збільшення активного елемента */
-    opacity: 1; /* Повна непрозорість */
-}
+    
           /* Mining Section */
             .start-mining-btn {
                 position: relative;
@@ -217,9 +82,10 @@
                 width: 95%;
                 box-shadow: 0 0 60px rgba(189, 183, 107, 0.9); /* Світіння */
                 transition: box-shadow 0.3s ease; /* Плавний перехід */
-                margin-left: 10px; 
-                top: 60px;
+                margin-left: 12px; 
+                top: -40px;
               }
+
           
            #coin-balance {
                 opacity: 1;
@@ -242,35 +108,143 @@
     top: 100px;
     left: 270px;
 }
+    .menu-container {
+    left: 14px;
+    position: relative;
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; /* Центруємо кнопки */
+    margin: -40px; 
+    max-width: 450px; /* Зменшено максимальну ширину контейнера */
+}
+
+.menu-button {
+    font-size: 52px; /* Розмір іконки */
+    width: 80px; /* Ширина кнопки */
+    height: 60px; /* Висота кнопки */
+    background-color: #333333; /* Прозорий фон */
+    color: #FFFFFF;
+    border: none; /* Без обрамлення */
+    border-radius: 10px; /* Злегка закруглені кути */
+    display: flex; /* Використовуємо флекс-контейнер */
+    flex-direction: column; /* Вирівнюємо в стовпчик */
+    align-items: center; /* Центруємо по горизонталі */
+    justify-content: center; /* Центруємо по вертикалі */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ефект глибини */
+    cursor: pointer; /* Курсор у вигляді руки */
+    margin: 10px; /* Відступ між кнопками */
+}
+
+.menu-button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Збільшення непрозорості при наведенні */
+    cursor: pointer; /* Курсор у вигляді руки */
+    margin: 10px; /* Відступ між кнопками */
+}
+     
+
+.menu-button span {
+    margin-top: 5px; /* Відстань між іконкою та текстом */
+    font-size: 12px; /* Розмір шрифту для тексту */
+    text-align: center; /* Центруємо текст */
+    overflow: hidden; /* Сховати текст, що виходить за межі */
+    white-space: nowrap; /* Уникнути перенесення тексту */
+    text-overflow: ellipsis; /* Додати три крапки, якщо текст не вміщується */
+}
+  /* Модальне вікно на весь екран */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Фон з затемненням */
+    margin: 0; /* Без відступів */
+    padding: 0; /* Без відступів */
+}
+
+/* Модальне вікно на весь екран */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Фон з затемненням */
+    margin: 0; /* Без відступів */
+    padding: 0; /* Без відступів */
+}
+
+/* Контент модального вікна */
+.modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0; /* Без відступів */
+    padding: 0; /* Без відступів */
+    overflow-y: auto; /* Додаємо вертикальну прокрутку при необхідності */
+}
+
+/* Кнопка закриття */
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    z-index: 2; /* Зробити кнопку видимою над іншим контентом */
+}
+
+/* Контейнер для зображення */
+.image-container {
+    width: 100%;
+    display: flex; /* Вирівнюємо контент по вертикалі */
+    align-items: flex-start; /* Вирівнювання зверху */
+}
+
+/* Зображення */
+.roadmap-image {
+    width: 100%; /* Зображення заповнює всю ширину */
+    height: auto; /* Висота автоматично для збереження пропорцій */
+    max-height: none; /* Висота може бути більше 100% */
+    object-fit: contain; /* Зберігає пропорції */
+    display: block; /* Блочний елемент для коректного відображення */
+}
+   
           .wallet-info {
             margin-top: 20px;
             color: white;
             font-size: 16px;
         }
+    
+    @media only screen and (max-width: 600px) {
+    body {
+        transform: scale(1);
+        transform-origin: top left;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+}
+    @media only screen and (orientation: portrait) {
+    body {
+        /* стилі для портретної орієнтації */
+    }
+}
+
+@media only screen and (orientation: landscape) {
+    body {
+        /* стилі для пейзажної орієнтації */
+    }
+}
+           
      </style>
 </head>
-  
-<body>
-<!-- Кнопка-гамбургер -->
-<div class="hamburger" onclick="toggleMenu()">
-    <div class="line"></div>
-    <div class="line"></div>
-    <div class="line"></div>
-</div>
 
-<!-- Вікно меню -->
-<div id="menu" class="menu">
-    <div class="modal">
-        <span class="close-button" onclick="closeModal()">×</span> <!-- Кнопка закриття -->
-        <div class="modal-content">
-            <ul>
-              <li><a href="#">Пункт 1</a></li>
-              <li><a href="#">Пункт 2</a></li>                <li><a href="#">Пункт 3</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
- 
 <div class="app-container">
     <!-- Header Section with Image -->
     <div class="header">
@@ -282,7 +256,7 @@
 <div class="mining-section">
     <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
 </div>
-  
+      
       <div>
     <div class="resizable-container">
             <span id="coin-balance"style="color: #ffffff;">0</span>
@@ -290,27 +264,46 @@
         <!-- Вміст контейнера -->
   </div>
         
-    <div class="custom-container">
-            <div class="container"></div>
-        </div>
-<span class="icon">⚡️</span>
-  
-  <div class="picker-container">
-    <div class="picker-wheel">
-        <div class="picker-item">1</div>
-        <div class="picker-item">2</div>
-        <div class="picker-item">3</div>
-        <div class="picker-item">4</div>
-        <div class="picker-item">5</div>
-        <div class="picker-item">6</div>
-        <div class="picker-item">7</div>
-    </div>
+ <div class="menu-container">
+    <button class="menu-button bank" onclick="openModal('modal-bank')">
+        <span>🏦</span>
+        <span>Банк</span>
+    </button>
+    <button class="menu-button wallet" onclick="openModal('modal-wallet')">
+        <span>👛</span>
+        <span>Гаманець</span>
+    </button>
+    <button class="menu-button earn" onclick="openModal('modal-earn')">
+        <span>💰</span>
+        <span>Заробіток</span>
+    </button>
+    <button class="menu-button friends" onclick="openModal('modal-friends')">
+        <span>👬</span>
+        <span>Друзі</span>
+    </button>
+      <button class="menu-button settings" onclick="openModal('modal-settings')">
+        <span>🛠️</span>
+        <span>Налаштування</span>
+    </button>
+      <button class="menu-button roadmap" onclick="openModal('modal-roadmap')">
+        <span>🗺️</span>
+        <span>Дорожня карта</span>
+    </button>
+</div>
+
+<!-- Модальне вікно -->
+<div id="modal-roadmap" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal-roadmap')">&times;</span>
+    <img src="https://i.ibb.co/qxHppVs/pdf.jpg" alt="Дорожня карта" class="roadmap-image">
+  </div>
 </div>
   
   <script>
     
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json', // виправлено URL
+   // Ініціалізація TonConnectUI
+const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
     buttonRootId: 'connect-button'
 });
 
@@ -318,32 +311,24 @@
 tonConnectUI.onStatusChange(status => {
     console.log(status); // Логування статусу
     if (status.connected) {
-        // Код для обробки підключення гаманця
         alert(`Connected: ${status.address}`);
     } else {
-        // Код для обробки відключення
         alert("Disconnected");
     }
 });
 
-function closeModal() {
-    document.getElementById("menu").style.display = "none"; // Сховати меню
-}
-
-function toggleMenu() {
-    const menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "block" ? "none" : "block"; // Toggle menu
-}
-
+// Змінні для відстеження балансу та видобутку
 let balance = 0;
 const miningDuration = 8000; // 8 секунд
 const miningPoints = 19;
 
+// Знайти елементи на сторінці
 const balanceDisplay = document.getElementById("coin-balance");
-const miningTimerDisplay = document.getElementById("mining-timer"); // Елемент для відображення таймера
 const startMiningButton = document.getElementById("start-mining-btn");
+const miningTimerDisplay = document.getElementById("mining-timer");
 const transferTableBody = document.querySelector("#transfer-table tbody");
 
+// Додавання обробника для кнопки початку видобутку
 startMiningButton.addEventListener("click", () => {
     startMiningButton.disabled = true; // Вимкнути кнопку
     startMiningButton.textContent = "Mining in progress ⛏️...";
@@ -371,71 +356,31 @@ startMiningButton.addEventListener("click", () => {
         clearInterval(timer); // Зупинити таймер
         balance += miningPoints; // Додати монети до балансу
         balanceDisplay.textContent = balance.toFixed(2); // Оновити відображення балансу
-
         startMiningButton.disabled = false; // Увімкнути кнопку
         startMiningButton.textContent = "Start Mining"; // Відновити текст кнопки
     }, miningDuration);
 });
-
-// Встановлюємо початкове положення колеса
-updateWheelPosition();
-updateActiveItem(currentIndex);
-
-// Додаємо обробник події для натискання на кнопки
-items.forEach((item, index) => {
-    item.addEventListener('click', () => {
-        currentIndex = index;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        // Додайте тут свою логіку для кнопки
-        alert(`Ви вибрали: ${item.innerText}`);
-    });
-});
-
-// Події для прокручування мишкою
-let isDragging = false;
-let startX = 0;
-
-wheel.addEventListener('mousedown', (event) => {
-    startX = event.clientX;
-    isDragging = true;
-});
-
-window.addEventListener('mouseup', () => {
-    isDragging = false;
-});
-
-window.addEventListener('mousemove', (event) => {
-    if (!isDragging) return;
-    const deltaX = event.clientX - startX;
-
-    if (deltaX > 50) {
-        currentIndex = (currentIndex - 1 + items.length) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startX = event.clientX; // Оновлення стартової позиції
-    } else if (deltaX < -50) {
-        currentIndex = (currentIndex + 1) % items.length;
-        updateWheelPosition();
-        updateActiveItem(currentIndex);
-        startX = event.clientX; // Оновлення стартової позиції
-    }
-});
-
-// Функція для оновлення позиції колеса
-function updateWheelPosition() {
-    wheel.style.transform = `translateX(${-currentIndex * itemWidth + (300 / 2) - (itemWidth / 2)}px)`;
+    
+    // Функція для відкриття модального вікна
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = "block";
 }
 
-// Функція для оновлення активного елемента
-function updateActiveItem(index) {
-    items.forEach((item, i) => {
-        item.classList.remove('active');
-        if (i === index) {
-            item.classList.add('active');
-        }
-    });
+// Функція для закриття модального вікна
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
 }
+
+    (async () => {
+  const userId = 'exampleUserId'; // Замініть на реальний userId
+
+  // Збереження початкового балансу
+  await saveBalance(userId, 100);
+
+  // Отримання та виведення балансу
+  const balance = await getBalance(userId);
+  console.log("User balance: ", balance);
+})();
 
     </script>
 </body>
