@@ -1,0 +1,5 @@
+DB_USER=balans_user
+DB_HOST=dpg-csagdrqj1k6c73cp8hlg-a.oregon-postgres.render.com
+DB_NAME=balans
+DB_PASSWORD=yAlZcxX1tpmZRcVhDyzsOuklsrJCv7Le
+DB_PORT=5432
