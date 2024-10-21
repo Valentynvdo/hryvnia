@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
-const { v4: uuidv4 } = require('uuid'); // Генерація UUID
+const { v4: uuidv4 } = require('uuid'); // Для генерації унікальних ID
 require('dotenv').config();
 
 const app = express();
@@ -24,7 +24,8 @@ const pool = new Pool({
 pool.query(`
     CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        balance DECIMAL NOT NULL DEFAULT 0
+        balance NUMERIC DEFAULT 0,
+        user_id VARCHAR(50) UNIQUE
     )
 `)
 .then(() => console.log("Table is successfully created"))
@@ -33,11 +34,23 @@ pool.query(`
 // Ендпоінт для ініціалізації користувача
 app.get('/initialize', async (req, res) => {
     try {
+        // Перевіряємо, чи вже є користувач
+        const existingUser = await pool.query('SELECT * FROM users LIMIT 1');
+        
+        if (existingUser.rows.length > 0) {
+            // Якщо користувач вже існує, повертаємо його дані
+            return res.json({
+                userId: existingUser.rows[0].id,
+                balance: existingUser.rows[0].balance
+            });
+        }
+
+        // Генерація нового унікального ID
         const userId = uuidv4(); // Генерація нового UUID
         const initialBalance = 0; // Початковий баланс
 
         // Зберегти ID і баланс у базі даних
-        await pool.query('INSERT INTO users (id, balance) VALUES ($1, $2)', [userId, initialBalance]);
+        await pool.query('INSERT INTO users (id, balance, user_id) VALUES ($1, $2, $3)', [userId, initialBalance, userId]);
 
         res.json({ userId, balance: initialBalance });
     } catch (error) {
@@ -46,41 +59,16 @@ app.get('/initialize', async (req, res) => {
     }
 });
 
-// Ендпоінт для отримання балансу
-app.get('/balance/:userId', async (req, res) => {
-    const { userId } = req.params;
+// Ендпоінт для оновлення балансу
+app.post('/update_balance', async (req, res) => {
+    const { userId, newBalance } = req.body;
+
     try {
-        const result = await pool.query('SELECT balance FROM users WHERE id = $1', [userId]);
-        if (result.rows.length > 0) {
-            res.json({ balance: result.rows[0].balance });
-        } else {
-            res.json({ balance: 0 });
-        }
+        await pool.query('UPDATE users SET balance = $1 WHERE id = $2', [newBalance, userId]);
+        res.sendStatus(204); // No Content
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Server Error");
-    }
-});
-
-// Оновити баланс
-app.post('/balance', async (req, res) => {
-    const { userId, amount } = req.body;
-    try {
-        const result = await pool.query('SELECT balance FROM users WHERE id = $1', [userId]);
-        let newBalance;
-
-        if (result.rows.length > 0) {
-            newBalance = parseFloat(result.rows[0].balance) + amount;
-            await pool.query('UPDATE users SET balance = $1 WHERE id = $2', [newBalance, userId]);
-        } else {
-            newBalance = amount;
-            await pool.query('INSERT INTO users (id, balance) VALUES ($1, $2)', [userId, newBalance]);
-        }
-
-        res.json({ balance: newBalance });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Server Error");
+        console.error('Error updating balance:', error);
+        res.status(500).send('Internal Server Error');
     }
 });
 
