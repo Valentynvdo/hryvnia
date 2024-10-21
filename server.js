@@ -34,25 +34,29 @@ pool.query(`
 // Ендпоінт для ініціалізації користувача
 app.get('/initialize', async (req, res) => {
     try {
-        // Перевіряємо, чи вже є користувач
-        const existingUser = await pool.query('SELECT * FROM users LIMIT 1');
-        
-        if (existingUser.rows.length > 0) {
-            // Якщо користувач вже існує, повертаємо його дані
-            return res.json({
-                userId: existingUser.rows[0].id,
-                balance: existingUser.rows[0].balance
-            });
+        const { userId } = req.query; // Отримуємо userId з запиту
+
+        if (userId) {
+            // Якщо userId передано, перевіряємо, чи існує користувач
+            const existingUser = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
+
+            if (existingUser.rows.length > 0) {
+                // Якщо користувач існує, повертаємо його дані
+                return res.json({
+                    userId: existingUser.rows[0].user_id,
+                    balance: existingUser.rows[0].balance
+                });
+            }
         }
 
-        // Генерація нового унікального ID
-        const userId = uuidv4(); // Генерація нового UUID
+        // Якщо користувача не існує або userId не передано, створюємо нового
+        const newUserId = uuidv4(); // Генерація нового UUID
         const initialBalance = 0; // Початковий баланс
 
         // Зберегти ID і баланс у базі даних
-        await pool.query('INSERT INTO users (id, balance, user_id) VALUES ($1, $2, $3)', [userId, initialBalance, userId]);
+        await pool.query('INSERT INTO users (id, balance, user_id) VALUES ($1, $2, $3)', [uuidv4(), initialBalance, newUserId]);
 
-        res.json({ userId, balance: initialBalance });
+        res.json({ userId: newUserId, balance: initialBalance });
     } catch (error) {
         console.error('Error initializing user:', error);
         res.status(500).send('Internal Server Error');
@@ -64,7 +68,12 @@ app.post('/update_balance', async (req, res) => {
     const { userId, newBalance } = req.body;
 
     try {
-        await pool.query('UPDATE users SET balance = $1 WHERE id = $2', [newBalance, userId]);
+        const result = await pool.query('UPDATE users SET balance = $1 WHERE user_id = $2', [newBalance, userId]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
         res.sendStatus(204); // No Content
     } catch (error) {
         console.error('Error updating balance:', error);
