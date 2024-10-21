@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const { v4: uuidv4 } = require('uuid'); // Для генерації унікальних ID
 require('dotenv').config();
 
 const app = express();
@@ -19,16 +20,42 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 });
 
-// Ініціалізація таблиці
+// Ініціалізація таблиць
 pool.query(`
-    CREATE TABLE IF NOT EXISTS balances (
-        id SERIAL PRIMARY KEY,
-        user_id VARCHAR(50) NOT NULL,
+    CREATE TABLE IF NOT EXISTS users (
+        id UUID PRIMARY KEY,
         balance DECIMAL NOT NULL
     )
 `)
-.then(() => console.log("Table is successfully created"))
+.then(() => console.log("Table 'users' is successfully created"))
 .catch(err => console.error(err));
+
+pool.query(`
+    CREATE TABLE IF NOT EXISTS balances (
+        id SERIAL PRIMARY KEY,
+        user_id UUID NOT NULL,
+        balance DECIMAL NOT NULL
+    )
+`)
+.then(() => console.log("Table 'balances' is successfully created"))
+.catch(err => console.error(err));
+
+// Ендпоінт для ініціалізації користувача
+app.get('/initialize', async (req, res) => {
+    try {
+        // Генерація нового унікального ID
+        const userId = uuidv4(); // Генерація нового UUID
+        const initialBalance = 0; // Початковий баланс
+
+        // Зберегти ID і баланс у базі даних
+        await pool.query('INSERT INTO users (id, balance) VALUES ($1, $2)', [userId, initialBalance]);
+
+        res.json({ userId, balance: initialBalance });
+    } catch (error) {
+        console.error('Error initializing user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 // Отримати баланс
 app.get('/balance/:userId', async (req, res) => {
@@ -68,35 +95,6 @@ app.post('/balance', async (req, res) => {
     }
 });
 
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const { Pool } = require('pg');
-const { v4: uuidv4 } = require('uuid'); // Для генерації унікальних ID
-
-const pool = new Pool({
-    connectionString: 'postgresql://balans_user:yAlZcxX1tpmZRcVhDyzsOuklsrJCv7Le@dpg-csagdrqj1k6c73cp8hlg-a.oregon-postgres.render.com/balans' // Ваш рядок підключення
-});
-
-app.use(bodyParser.json());
-
-// Ендпоінт для ініціалізації користувача
-app.get('/initialize', async (req, res) => {
-    try {
-        // Генерація нового унікального ID
-        const userId = uuidv4(); // Генерація нового UUID
-        const initialBalance = 0; // Початковий баланс
-
-        // Зберегти ID і баланс у базі даних
-        await pool.query('INSERT INTO users (id, balance) VALUES ($1, $2)', [userId, initialBalance]);
-
-        res.json({ userId, balance: initialBalance });
-    } catch (error) {
-        console.error('Error initializing user:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
 // Ендпоінт для оновлення балансу
 app.post('/update_balance', async (req, res) => {
     const { userId, newBalance } = req.body;
@@ -111,6 +109,6 @@ app.post('/update_balance', async (req, res) => {
 });
 
 // Запуск сервера
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
