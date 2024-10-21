@@ -423,7 +423,15 @@ async function saveBalance(userId, newBalance) {
         console.error('Error saving balance:', error);
     }
 }
-    
+    // Функція для відкриття модального вікна
+function openModal (modalId) {
+    document.getElementById(modalId).style.display = "block";
+}
+
+// Функція для закриття модального вікна
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = "none";
+}
     </script>
 </body>
 </html>
