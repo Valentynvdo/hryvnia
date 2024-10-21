@@ -258,11 +258,6 @@
            
      </style>
 </head>
-  
-  <div style="position: relative;"> <!-- Контейнер з відносним позиціонуванням -->
-    <div class="user-id-container">
-        <span id="user-id" style="cursor: pointer;">ID: user-xxxxxxx</span>
-    </div>
 
 <div class="app-container">
     <!-- Header Section with Image -->
@@ -275,6 +270,10 @@
 <div class="mining-section">
     <button class="start-mining-btn" id="start-mining-btn">Start Mining</button>
 </div>
+      
+    <div class="user-id-container">
+        <span id="user-id" style="cursor: pointer;">ID: user-xxxxxxx</span>
+    </div>
       
       <div>
     <div class="resizable-container">
@@ -322,8 +321,8 @@
     
 // Ініціалізація TonConnectUI
 const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
-    buttonRootId: 'connect-button'
+    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
+    buttonRootId: 'connect-button'
 });
 
 // Змінні для відстеження статусу підключення та балансу
@@ -338,123 +337,92 @@ const startMiningButton = document.getElementById("start-mining-btn");
 const miningTimerDisplay = document.getElementById("mining-timer");
 const userIdDisplay = document.getElementById("user-id"); // Відображення ID користувача
 
-// Відслідковування статусу підключення
-tonConnectUI.onStatusChange(status => {
-    if (status.connected) {
-        alert(`Connected: ${status.address}`);
-        initializeUser(status.address); // Ініціалізація користувача при підключенні
-    } else {
-        alert("Disconnected");
-    }
-});
-
 // Функція для ініціалізації користувача
-async function initializeUser(address) {
-    try {
-        const response = await fetch(`/initialize?userId=${connectedUserId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+async function initializeUser() {
+    try {
+        const response = await fetch(`/initialize`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-        // Перевірка відповіді сервера
-        if (!response.ok) {
-            throw new Error('Failed to initialize user');
-        }
+        // Перевірка відповіді сервера
+        if (!response.ok) {
+            throw new Error('Failed to initialize user');
+        }
 
-        const data = await response.json();
-        connectedUserId = data.userId; // Зберігаємо отриманий ID
-        balance = data.balance || 0; // Зберігаємо баланс
-        balanceDisplay.textContent = balance.toFixed(2); // Оновлюємо відображення балансу
-        userIdDisplay.textContent = `User ID: ${connectedUserId}`; // Відображаємо ID користувача
-    } catch (error) {
-        console.error('Error initializing user:', error);
-    }
+        const data = await response.json();
+        connectedUserId = data.userId; // Зберігаємо отриманий ID
+        balance = data.balance || 0; // Зберігаємо баланс
+        balanceDisplay.textContent = balance.toFixed(2); // Оновлюємо відображення балансу
+        userIdDisplay.textContent = `User ID: ${connectedUserId}`; // Відображаємо ID користувача
+    } catch (error) {
+        console.error('Error initializing user:', error);
+    }
 }
+
+// Виклик ініціалізації користувача при завантаженні додатку
+initializeUser();
 
 // Додавання обробника для кнопки початку майнінгу
 startMiningButton.addEventListener("click", () => {
-    startMiningButton.disabled = true;
-    startMiningButton.textContent = "Mining in progress ⛏️...";
+    startMiningButton.disabled = true;
+    startMiningButton.textContent = "Mining in progress ⛏️...";
 
-    let remainingTime = miningDuration;
-    const interval = 100;
+    let remainingTime = miningDuration;
+    const interval = 100;
 
-    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
+    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
 
-    const timer = setInterval(() => {
-        remainingTime -= interval;
-        const seconds = (remainingTime / 1000).toFixed(2);
-        miningTimerDisplay.textContent = seconds;
+    const timer = setInterval(() => {
+        remainingTime -= interval;
+        const seconds = (remainingTime / 1000).toFixed(2);
+        miningTimerDisplay.textContent = seconds;
 
-        if (remainingTime <= 0) {
-            clearInterval(timer);
-            remainingTime = 0;
-            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
-        }
-    }, interval);
+        if (remainingTime <= 0) {
+            clearInterval(timer);
+            remainingTime = 0;
+            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
+        }
+    }, interval);
 
-    setTimeout(() => {
-        clearInterval(timer);
-        balance += miningPoints;
-        balanceDisplay.textContent = balance.toFixed(2);
+    setTimeout(() => {
+        clearInterval(timer);
+        balance += miningPoints;
+        balanceDisplay.textContent = balance.toFixed(2);
 
-        // Зберегти новий баланс на сервері
-        saveBalance(connectedUserId, balance);
+        // Зберегти новий баланс на сервері
+        saveBalance(connectedUserId, balance);
 
-        startMiningButton.disabled = false;
-        startMiningButton.textContent = "Start Mining";
-    }, miningDuration);
+        startMiningButton.disabled = false;
+        startMiningButton.textContent = "Start Mining";
+    }, miningDuration);
 });
 
 // Функція для збереження балансу на сервері
 async function saveBalance(userId, newBalance) {
-    try {
-        const response = await fetch('/update_balance', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId, newBalance })
-        });
-        if (!response.ok) {
-            throw new Error('Failed to save balance');
-        }
-        console.log(`Saved balance for ${userId}: ${newBalance}`);
-    } catch (error) {
-        console.error('Error saving balance:', error);
-    }
+    if (!userId) {
+        console.error("User ID is empty. Cannot save balance.");
+        return;
+    }
+
+    try {
+        const response = await fetch('/update_balance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, newBalance })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save balance');
+        }
+        console.log(`Saved balance for ${userId}: ${newBalance}`);
+    } catch (error) {
+        console.error('Error saving balance:', error);
+    }
 }
-
-// Функція для копіювання ID користувача
-function copyUserId() {
-    const userIdElement = document.getElementById("user-id");
-    const range = document.createRange();
-    range.selectNode(userIdElement);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
-
-    try {
-        document.execCommand("copy");
-        alert("ID скопійовано: " + userIdElement.textContent);
-    } catch (err) {
-        console.error("Не вдалося скопіювати ID", err);
-    }
-    
-    window.getSelection().removeAllRanges();
-}
-
-// Функція для відкриття модального вікна
-function openModal (modalId) {
-document.getElementById(modalId) .style.display = "block";
- }
-
-// Функція для закриття модального вікна
-function closeModal(modalId) {
-document.getElementById(modalId) .style.display = "none";
- }
-
     </script>
 </body>
 </html>
