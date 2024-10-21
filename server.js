@@ -1,78 +1,130 @@
-const express = require('express');
-const cors = require('cors');
-const { Pool } = require('pg');
-const { v4: uuidv4 } = require('uuid'); // Для генерації унікальних ID
-require('dotenv').config();
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Налаштування PostgreSQL
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
+// Ініціалізація TonConnectUI
+const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
+    buttonRootId: 'connect-button'
 });
 
-// Ініціалізація таблиці
-pool.query(`
-    CREATE TABLE IF NOT EXISTS users (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        balance NUMERIC DEFAULT 0,
-        user_id VARCHAR(50) UNIQUE
-    )
-`)
-.then(() => console.log("Table is successfully created"))
-.catch(err => console.error(err));
+// Змінні для відстеження статусу підключення та балансу
+let connectedUserId = ''; // Змінна для зберігання ID
+let balance = 0;
+const miningDuration = 8000; // 8 секунд
+const miningPoints = 19; // Кількість поінтів за майнінг
 
-// Ендпоінт для ініціалізації користувача
-app.get('/initialize', async (req, res) => {
+// Знайти елементи на сторінці
+const balanceDisplay = document.getElementById("coin-balance");
+const startMiningButton = document.getElementById("start-mining-btn");
+const miningTimerDisplay = document.getElementById("mining-timer");
+const userIdDisplay = document.getElementById("user-id"); // Відображення ID користувача
+
+// Функція для ініціалізації користувача
+async function initializeUser() {
+    // Перевірка, чи є вже збережений ID користувача в локальному сховищі
+    const savedUserId = localStorage.getItem('userId');
+    
+    if (savedUserId) {
+        // Використовуємо збережений ID для отримання балансу
+        const response = await fetch(`/get_balance?userId=${savedUserId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            connectedUserId = savedUserId; // Встановлюємо ID з локального сховища
+            balance = data.balance || 0; // Оновлюємо баланс
+            balanceDisplay.textContent = balance.toFixed(2); // Оновлюємо відображення балансу
+            userIdDisplay.textContent = `User ID: ${connectedUserId}`; // Відображаємо ID користувача
+            return; // Виходимо, якщо користувач вже існує
+        }
+    }
+
+    // Якщо немає збереженого ID, генеруємо нового користувача
     try {
-        // Перевіряємо, чи вже є користувач
-        const existingUser = await pool.query('SELECT * FROM users LIMIT 1');
-        
-        if (existingUser.rows.length > 0) {
-            // Якщо користувач вже існує, повертаємо його дані
-            return res.json({
-                userId: existingUser.rows[0].id,
-                balance: existingUser.rows[0].balance
-            });
+        const response = await fetch(`/initialize`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        // Перевірка відповіді сервера
+        if (!response.ok) {
+            throw new Error('Failed to initialize user');
         }
 
-        // Генерація нового унікального ID
-        const userId = uuidv4(); // Генерація нового UUID
-        const initialBalance = 0; // Початковий баланс
-
-        // Зберегти ID і баланс у базі даних
-        await pool.query('INSERT INTO users (id, balance, user_id) VALUES ($1, $2, $3)', [userId, initialBalance, userId]);
-
-        res.json({ userId, balance: initialBalance });
+        const data = await response.json();
+        connectedUserId = data.userId; // Зберігаємо отриманий ID
+        balance = data.balance || 0; // Зберігаємо баланс
+        balanceDisplay.textContent = balance.toFixed(2); // Оновлюємо відображення балансу
+        userIdDisplay.textContent = `User ID: ${connectedUserId}`; // Відображаємо ID користувача
+        
+        // Зберігаємо ID користувача в локальному сховищі
+        localStorage.setItem('userId', connectedUserId);
     } catch (error) {
         console.error('Error initializing user:', error);
-        res.status(500).send('Internal Server Error');
     }
+}
+
+// Виклик ініціалізації користувача при завантаженні додатку
+initializeUser();
+
+// Додавання обробника для кнопки початку майнінгу
+startMiningButton.addEventListener("click", () => {
+    startMiningButton.disabled = true;
+    startMiningButton.textContent = "Mining in progress ⛏️...";
+
+    let remainingTime = miningDuration;
+    const interval = 100;
+
+    miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
+
+    const timer = setInterval(() => {
+        remainingTime -= interval;
+        const seconds = (remainingTime / 1000).toFixed(2);
+        miningTimerDisplay.textContent = seconds;
+
+        if (remainingTime <= 0) {
+            clearInterval(timer);
+            remainingTime = 0;
+            miningTimerDisplay.textContent = (remainingTime / 1000).toFixed(2);
+        }
+    }, interval);
+
+    setTimeout(() => {
+        clearInterval(timer);
+        balance += miningPoints;
+        balanceDisplay.textContent = balance.toFixed(2);
+
+        // Зберегти новий баланс на сервері
+        saveBalance(connectedUserId, balance);
+
+        startMiningButton.disabled = false;
+        startMiningButton.textContent = "Start Mining";
+    }, miningDuration);
 });
 
-// Ендпоінт для оновлення балансу
-app.post('/update_balance', async (req, res) => {
-    const { userId, newBalance } = req.body;
+// Функція для збереження балансу на сервері
+async function saveBalance(userId, newBalance) {
+    if (!userId) {
+        console.error("User ID is empty. Cannot save balance.");
+        return;
+    }
 
     try {
-        await pool.query('UPDATE users SET balance = $1 WHERE id = $2', [newBalance, userId]);
-        res.sendStatus(204); // No Content
+        const response = await fetch('/update_balance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userId, newBalance })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save balance');
+        }
+        console.log(`Saved balance for ${userId}: ${newBalance}`);
     } catch (error) {
-        console.error('Error updating balance:', error);
-        res.status(500).send('Internal Server Error');
+        console.error('Error saving balance:', error);
     }
-});
-
-// Запуск сервера
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+}
